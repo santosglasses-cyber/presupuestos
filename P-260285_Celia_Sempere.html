@@ -397,6 +397,20 @@ function aceptarYDescargar() {
   // Abrir correo de confirmación
   window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
 
+  // Enviar por API
+  var cliEmail = (document.getElementById('cliEmail') ? document.getElementById('cliEmail').value.trim() : '');
+  var cliTel = (document.getElementById('cliTel') ? document.getElementById('cliTel').value.trim() : '');
+  var firmaData = (firmaCanvas && window.hasSig) ? firmaCanvas.toDataURL('image/png') : '';
+  enviarFirmaAPI(
+    document.getElementById('docNum').textContent,
+    cliente,
+    cliEmail,
+    cliTel,
+    codigo,
+    firmaData,
+    ahora
+  );
+
   alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\nCódigo: ' + codigo + '\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
     '📄 PDF abierto en nueva pestaña\n' +
@@ -406,6 +420,23 @@ function aceptarYDescargar() {
   btn.textContent = '✅ ACEPTADO';
   btn.disabled = true;
 }
+
+// API integration: envía firma al backend
+async function enviarFirmaAPI(presupuesto, cliente, email, telefono, codigo, firmaImg, fecha) {
+  const API_URL = 'https://santos-glasses-api.onrender.com/api/firmar';
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha })
+    });
+    if (resp.ok) console.log('✅ Email enviado via API');
+    else console.log('⚠️ API error');
+  } catch(e) {
+    console.log('⚠️ API no disponible');
+  }
+}
+
 </script>
 </body>
 </html>
