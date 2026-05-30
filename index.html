@@ -421,19 +421,28 @@ function aceptarYDescargar() {
   btn.disabled = true;
 }
 
+// Despertar Render al cargar la pagina (plan gratuito se duerme)
+(function despertarRender() {
+  fetch('https://santos-glasses-api.onrender.com/api/health', { method: 'GET', mode: 'no-cors' });
+})();
+
 // API integration: envía firma al backend
 async function enviarFirmaAPI(presupuesto, cliente, email, telefono, codigo, firmaImg, fecha) {
   const API_URL = 'https://santos-glasses-api.onrender.com/api/firmar';
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
     const resp = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha })
+      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     if (resp.ok) console.log('✅ Email enviado via API');
-    else console.log('⚠️ API error');
+    else console.log('⚠️ API error (' + resp.status + ')');
   } catch(e) {
-    console.log('⚠️ API no disponible');
+    console.log('⚠️ API no disponible, se uso mailto como respaldo');
   }
 }
 
