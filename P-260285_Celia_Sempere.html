@@ -344,7 +344,14 @@ function aceptarYDescargar() {
   var cliente = document.getElementById('cliNombre').value.trim() || 'Cliente';
   var ahora = new Date().toLocaleString('es-ES', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
 
-  // Render firma en el HTML para que salga en el PDF
+  // GENERAR CÓDIGO DE COMPROBANTE (12 caracteres)
+  var codigo = '';
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  for (var i = 0; i < 12; i++) {
+    codigo += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  // Render firma en el HTML
   var firmaCanvas = document.getElementById('fCanvas');
   if (firmaCanvas && window.hasSig) {
     var firmaImg = document.createElement('img');
@@ -356,15 +363,12 @@ function aceptarYDescargar() {
     firmaImg.style.display = 'block';
     firmaImg.style.margin = '6px 0';
     firmaImg.id = 'firmaRender';
-    // Remove old one if exists
     var old = document.getElementById('firmaRender');
     if (old) old.remove();
-    // Insert after canvas parent
     var parent = firmaCanvas.closest('.firma-inline') || firmaCanvas.parentNode;
     if (parent) parent.after(firmaImg);
   }
-
-  // Insert fecha de firma visible
+  
   var fechaFirma = document.getElementById('fechaFirma');
   if (!fechaFirma) {
     fechaFirma = document.createElement('p');
@@ -374,6 +378,18 @@ function aceptarYDescargar() {
     if (ref) ref.before(fechaFirma);
   }
   fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
+  
+  // Añadir código de comprobante visible
+  var codigoEl = document.getElementById('codigoFirma');
+  if (!codigoEl) {
+    codigoEl = document.createElement('div');
+    codigoEl.id = 'codigoFirma';
+    codigoEl.style.cssText = 'margin:8px 0;padding:10px;background:#f0faf8;border:1px solid #008c78;border-radius:8px;text-align:center;';
+    fechaFirma.after(codigoEl);
+  }
+  codigoEl.innerHTML = '<span style="font-size:10px;color:#666;">CÓDIGO DE COMPROBANTE</span><br>' +
+    '<span style="font-size:18px;font-weight:bold;color:#008c78;letter-spacing:3px;font-family:monospace;">' + codigo + '</span><br>' +
+    '<span style="font-size:9px;color:#999;">Anote este código para validar su firma</span>';
 
   // Abrir PDF en nueva pestaña
   descargarPdf();
@@ -381,7 +397,7 @@ function aceptarYDescargar() {
   // Abrir correo de confirmación
   window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
 
-  alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
+  alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\nCódigo: ' + codigo + '\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
     '📄 PDF abierto en nueva pestaña\n' +
     '📧 Correo abierto como respaldo');
