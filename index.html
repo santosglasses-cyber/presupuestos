@@ -444,6 +444,22 @@ async function enviarFirmaAPI(presupuesto, cliente, email, telefono, codigo, fir
   } catch(e) {
     console.log('⚠️ API no disponible, se uso mailto como respaldo');
   }
+  
+  // INTENTO 2: Proxy local directo
+  try {
+    const controller2 = new AbortController();
+    setTimeout(() => controller2.abort(), 15000);
+    await fetch('http://76.13.36.216:33500/api/enviar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha }),
+      signal: controller2.signal,
+      mode: 'no-cors'
+    });
+    console.log('✅ Email enviado via proxy local');
+  } catch(e) {
+    console.log('⚠️ Proxy local no disponible');
+  }
 }
 
 </script>
