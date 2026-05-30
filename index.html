@@ -375,66 +375,20 @@ function aceptarYDescargar() {
   }
   fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
 
-  var txt = '';
-  txt += '╔══════════════════════════════════════════════════╗\n';
-  txt += '║  PRESUPUESTO ELECTRÓNICO                        ║\n';
-  txt += '║  Santos Glasses - Joaquín Castro S.L.           ║\n';
-  txt += '╚══════════════════════════════════════════════════╝\n\n';
-  txt += 'Nº: ' + (document.getElementById('docNum').textContent) + '\n';
-  txt += 'Fecha: ' + (document.getElementById('docDate').textContent) + '\n\n';
-  txt += '─ CLIENTE ────────────────────────────────────────────\n';
-  txt += '  ' + cliente + '\n';
-  txt += '  Tel: ' + document.getElementById('cliTel').value.trim() + '\n';
-  txt += '  Email: ' + document.getElementById('cliEmail').value.trim() + '\n';
-  txt += '  Dirección: ' + document.getElementById('cliDir').value.trim() + '\n';
-  txt += '  CIF/NIF: ' + document.getElementById('cliCif').value.trim() + '\n';
-  txt += '\n';
-  txt += '─ CONCEPTOS ──────────────────────────────────────────\n';
-  var filas = document.querySelectorAll('table tbody tr');
-  filas.forEach(function(tr) {
-    var celdas = tr.querySelectorAll('td');
-    if (celdas.length >= 7) {
-      txt += '  ' + celdas[0].textContent.trim() + ' ... ' + celdas[6].textContent.trim() + '\n';
-    }
-  });
-  txt += '\n─ RESUMEN ─────────────────────────────────────────────\n';
-  txt += '  Total documento:    ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '0,00 €') + '\n';
-  txt += '\n─ PAGO ──────────────────────────────────────────────\n';
-  txt += '  CaixaBank · IBAN: ES74 2100 4935 0613 0086 2186\n';
-  txt += '  50% señal · 50% resto a la entrega\n\n';
-  txt += '─ RESERVA DE DOMINIO MERCANTIL ───────────────────────\n';
-  txt += '  El material es propiedad de Joaquín Castro S.L.\n';
-  txt += '  hasta el abono íntegro del documento.\n\n';
-  txt += '─ CERTIFICACIÓN ELECTRÓNICA ──────────────────────────\n';
-  txt += '  ✓ FIRMADO ELECTRÓNICAMENTE\n';
-  txt += '  Fecha: ' + ahora + '\n\n';
-  txt += '╔══════════════════════════════════════════════════╗\n';
-  txt += '║  Santos Glasses                                 ║\n';
-  txt += '║  C/ Concordia 11 posterior, 28931 Móstoles, Madrid        ║\n';
-  txt += '║  Tlf: 646 469 788                               ║\n';
-  txt += '║  info@cristaleriasantosglasses.com              ║\n';
-  txt += '╚══════════════════════════════════════════════════╝\n';
+  // Abrir PDF en nueva pestaña
+  descargarPdf();
 
-  var blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.setAttribute('download', (document.getElementById('docNum').textContent) + '_' + cliente.replace(/ /g, '_') + '.txt');
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
+  // Abrir correo de confirmación
   window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
 
   alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
-    '📁 Archivo descargado en su dispositivo\n' +
+    '📄 PDF abierto en nueva pestaña\n' +
     '📧 Correo abierto como respaldo');
 
   document.getElementById('modalFirma').classList.remove('active');
-  btn.textContent = '▶ ACEPTAR PRESUPUESTO';
-  btn.disabled = false;
+  btn.textContent = '✅ ACEPTADO';
+  btn.disabled = true;
 }
 </script>
 </body>
