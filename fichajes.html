@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fichajes - Santos Glasses</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; min-height: 100vh; }
+.header { background: #1a5276; color: white; padding: 16px; text-align: center; position: sticky; top: 0; z-index: 10; }
+.header h1 { font-size: 20px; }
+.sub { font-size: 12px; opacity: .8; }
+.container { max-width: 480px; margin: 0 auto; padding: 16px; }
+.card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.card-title { font-size: 14px; font-weight: 600; color: #1a5276; margin-bottom: 12px; }
+.btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-entrada { background: #27ae60; color: white; }
+.btn-salida { background: #e74c3c; color: white; }
+.btn-sec { background: #ecf0f1; color: #2c3e50; font-size: 14px; padding: 12px; margin-bottom: 6px; }
+.btn-gps { background: #3498db; color: white; font-size: 14px; padding: 12px; }
+.empleado-select { width: 100%; padding: 14px; font-size: 16px; border: 2px solid #dfe6e9; border-radius: 10px; background: white; margin-bottom: 12px; }
+.gps-status { font-size: 11px; color: #95a5a6; margin-top: 6px; }
+.estado { text-align: center; padding: 8px; border-radius: 8px; font-size: 14px; margin-top: 8px; display: none; }
+.estado-ok { display: block; background: #d4edda; color: #155724; }
+.estado-error { display: block; background: #f8d7da; color: #721c24; }
+.estado-info { display: block; background: #d1ecf1; color: #0c5460; }
+.hidden { display: none; }
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+.tab { flex: 1; padding: 10px; text-align: center; border: none; background: #dfe6e9; border-radius: 8px 8px 0 0; font-size: 13px; font-weight: 600; cursor: pointer; color: #636e72; }
+.tab.active { background: white; color: #1a5276; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: #1a5276; color: white; padding: 6px 4px; text-align: left; font-weight: 500; }
+td { padding: 5px 4px; border-bottom: 1px solid #eee; }
+.resumen { background: #e8f8f5; border-radius: 8px; padding: 12px; margin-top: 8px; font-size: 13px; }
+.leyenda { font-size: 12px; color: #bdc3c7; margin-top: 16px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Santos Glasses</h1>
+  <div class="sub">Control de fichajes</div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('fichar')">Fichar</button>
+    <button class="tab" onclick="showTab('historial')">Historial</button>
+    <button class="tab" onclick="showTab('resumen')">Resumen</button>
+  </div>
+
+  <div id="tab-fichar" class="tab-content active">
+    <div class="card">
+      <div class="card-title">Quien eres?</div>
+      <select id="empleado" class="empleado-select">
+        <option value="">Selecciona...</option>
+        <option value="Antonio">Antonio (dueno)</option>
+        <option value="Empleado2">Empleado 2</option>
+        <option value="Empleado3">Empleado 3</option>
+      </select>
+    </div>
+    <div class="card">
+      <button class="btn btn-gps" onclick="obtenerPos()"> Obtener ubicacion</button>
+      <div id="gps-info" class="gps-status">Pulsa para obtener tu posicion</div>
+    </div>
+    <div class="card">
+      <button class="btn btn-entrada" id="btn-e" onclick="fichar('entrada')">FICHAR ENTRADA</button>
+      <button class="btn btn-salida" id="btn-s" onclick="fichar('salida')">FICHAR SALIDA</button>
+    </div>
+    <div id="ultimo" class="card hidden">
+      <div class="card-title">Ultimo fichaje</div>
+      <div id="ultimo-info"></div>
+    </div>
+    <div id="estado" class="estado"></div>
+  </div>
+
+  <div id="tab-historial" class="tab-content">
+    <div class="card">
+      <div class="card-title">Fichajes del dia</div>
+      <input type="date" id="fecha-h" style="width:100%;padding:10px;border:2px solid #dfe6e9;border-radius:8px;margin-bottom:8px;">
+      <button class="btn btn-sec" onclick="cargarHistorial()">Recargar</button>
+      <div id="historial-div"><p style="color:#95a5a6;">Selecciona fecha</p></div>
+    </div>
+  </div>
+
+  <div id="tab-resumen" class="tab-content">
+    <div class="card">
+      <div class="card-title">Resumen mensual</div>
+      <input type="month" id="mes-r" style="width:100%;padding:10px;border:2px solid #dfe6e9;border-radius:8px;margin-bottom:8px;">
+      <button class="btn btn-sec" onclick="cargarResumen()">Calcular</button>
+      <div id="resumen-div"></div>
+      <div style="margin-top:12px;">
+        <button class="btn btn-sec" onclick="descargarExcel()">Descargar Excel</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Vacaciones / Bajas</div>
+      <select id="tipo-aus" class="empleado-select">
+        <option value="Vacaciones">Vacaciones</option>
+        <option value="Baja">Baja medica</option>
+        <option value="Permiso">Permiso</option>
+      </select>
+      <input type="date" id="fecha-aus" class="empleado-select" style="margin-bottom:6px;">
+      <button class="btn btn-sec" onclick="registrarAusencia()">Anadir</button>
+    </div>
+  </div>
+  <div class="leyenda">C/ Concordia 11 posterior, 28931 Mostoles</div>
+</div>
+
+<script>
+// TK, TT y BOARD vienen de config.js
+</script><script src="config.js"></script><script>
+
+var LISTA_ID = null;
+var pos = null;
+
+window.onload = function() {
+  var h = new Date().toISOString().split('T')[0];
+  document.getElementById('fecha-h').value = h;
+  document.getElementById('mes-r').value = h.substring(0,7);
+  document.getElementById('fecha-aus').value = h;
+  obtenerLista();
+};
+
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+  document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});
+  document.querySelector('.tab[onclick*="'+t+'"]').classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if (t=='historial') cargarHistorial();
+  if (t=='resumen') cargarResumen();
+}
+
+function est(txt, tipo) {
+  var e = document.getElementById('estado');
+  e.textContent = txt;
+  e.className = 'estado estado-'+tipo;
+  if (tipo!=='info') setTimeout(function(){e.className='estado'},5000);
+}
+
+function obtenerPos() {
+  if (!navigator.geolocation) { document.getElementById('gps-info').textContent='No GPS'; return; }
+  document.getElementById('gps-info').textContent='Obteniendo...';
+  navigator.geolocation.getCurrentPosition(function(p){
+    pos = {lat:p.coords.latitude.toFixed(6), lng:p.coords.longitude.toFixed(6)};
+    document.getElementById('gps-info').innerHTML = 'GPS: '+pos.lat+', '+pos.lng;
+    est('GPS ok','info');
+  }, function(e){
+    document.getElementById('gps-info').textContent='Error GPS: '+e.message;
+  }, {enableHighAccuracy:true, timeout:10000});
+}
+
+function obtenerLista() {
+  var x = new XMLHttpRequest();
+  x.open('GET','https://api.trello.com/1/boards/'+BOARD+'/lists?key='+TK+'&token='+TT, true);
+  x.onload = function() {
+    if (x.status==200) {
+      var lists = JSON.parse(x.responseText);
+      var f = lists.find(function(l){return l.name==='Fichajes';});
+      if (f) { LISTA_ID = f.id; return; }
+      var x2 = new XMLHttpRequest();
+      x2.open('POST','https://api.trello.com/1/lists?name=Fichajes&idBoard='+BOARD+'&key='+TK+'&token='+TT, true);
+      x2.onload = function(){if(x2.status==200) LISTA_ID=JSON.parse(x2.responseText).id;};
+      x2.send();
+    }
+  };
+  x.send();
+}
+
+function fichar(tipo) {
+  var emp = document.getElementById('empleado').value;
+  if (!emp) { est('Selecciona empleado','error'); return; }
+  document.getElementById('btn-e').disabled = true;
+  document.getElementById('btn-s').disabled = true;
+  est('Guardando...','info');
+  
+  var a = new Date();
+  var fecha = a.toISOString().split('T')[0];
+  var hora = a.toTimeString().split(' ')[0];
+  var gps = pos ? (pos.lat+','+pos.lng) : 'no';
+  var titulo = emp+' - '+fecha;
+  var txt = tipo.toUpperCase()+'\nEmp: '+emp+'\nFecha: '+fecha+'\nHora: '+hora+'\nGPS: '+gps;
+  
+  if (!LISTA_ID) { est('Espera a conectar Trello','error'); enable(); return; }
+  
+  // buscar si ya hay tarjeta
+  var x = new XMLHttpRequest();
+  x.open('GET','https://api.trello.com/1/lists/'+LISTA_ID+'/cards?key='+TK+'&token='+TT, true);
+  x.onload = function() {
+    if (x.status==200) {
+      var cards = JSON.parse(x.responseText);
+      var existente = cards.find(function(c){return c.name.indexOf(emp)>=0 && c.name.indexOf(fecha)>=0;});
+      
+      if (existente) {
+        // add comment
+        var x2 = new XMLHttpRequest();
+        x2.open('POST','https://api.trello.com/1/cards/'+existente.id+'/actions/comments', true);
+        x2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        x2.onload = function() {
+          // update desc
+          var x3 = new XMLHttpRequest();
+          x3.open('PUT','https://api.trello.com/1/cards/'+existente.id, true);
+          x3.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+          x3.onload = function() {
+            done(emp, tipo, fecha, hora, gps);
+          };
+          var descActual = existente.desc || '';
+          var nuevos = [txt].concat(descActual.split('\n---\n')).slice(0,30);
+          x3.send('desc='+encodeURIComponent(nuevos.join('\n---\n'))+'&key='+TK+'&token='+TT);
+        };
+        x2.send('text='+encodeURIComponent(txt)+'&key='+TK+'&token='+TT);
+      } else {
+        // create card
+        var x4 = new XMLHttpRequest();
+        x4.open('POST','https://api.trello.com/1/cards', true);
+        x4.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        x4.onload = function() {
+          if (x4.status==200) {
+            var card = JSON.parse(x4.responseText);
+            var x5 = new XMLHttpRequest();
+            x5.open('POST','https://api.trello.com/1/cards/'+card.id+'/actions/comments', true);
+            x5.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+            x5.onload = function() { done(emp, tipo, fecha, hora, gps); };
+            x5.send('text='+encodeURIComponent(txt)+'&key='+TK+'&token='+TT);
+          } else { est('Error al crear tarjeta','error'); enable(); }
+        };
+        x4.send('name='+encodeURIComponent(titulo)+'&desc='+encodeURIComponent(txt)+'&idList='+LISTA_ID+'&key='+TK+'&token='+TT);
+      }
+    } else { est('Error Trello','error'); enable(); }
+  };
+  x.send();
+}
+
+function done(emp, tipo, fecha, hora, gps) {
+  document.getElementById('ultimo').classList.remove('hidden');
+  document.getElementById('ultimo-info').innerHTML = '<strong>'+emp+'</strong><br>'+(tipo=='entrada'?'Entrada':'Salida')+' '+fecha+' '+hora+(gps!='no'?'<br>GPS: '+gps:'');
+  est('Fichaje guardado','ok');
+  enable();
+  cargarHistorial();
+}
+
+function enable() {
+  document.getElementById('btn-e').disabled = false;
+  document.getElementById('btn-s').disabled = false;
+}
+
+function cargarHistorial() {
+  var fecha = document.getElementById('fecha-h').value;
+  if (!fecha || !LISTA_ID) return;
+  var div = document.getElementById('historial-div');
+  div.innerHTML = '<p>Cargando...</p>';
+  var x = new XMLHttpRequest();
+  x.open('GET','https://api.trello.com/1/lists/'+LISTA_ID+'/cards?key='+TK+'&token='+TT, true);
+  x.onload = function() {
+    if (x.status!=200) { div.innerHTML='<p>Error</p>'; return; }
+    var cards = JSON.parse(x.responseText).filter(function(c){return c.name.indexOf(fecha)>=0;});
+    if (cards.length==0) { div.innerHTML='<p>Sin fichajes hoy</p>'; return; }
+    var h = '';
+    cards.forEach(function(card) {
+      var emp = card.name.split(' - ')[0];
+      var comentarios = (card.desc||'').split('\n---\n');
+      var ent = comentarios.filter(function(l){return l.indexOf('ENTRADA')>=0;}).length;
+      var sal = comentarios.filter(function(l){return l.indexOf('SALIDA')>=0;}).length;
+      h += '<div style="background:#f8f9fa;padding:8px;border-radius:6px;margin:4px 0;"><strong>'+emp+'</strong>';
+      h += '<div style="font-size:12px;">Entradas: '+ent+' | Salidas: '+sal+'</div></div>';
+    });
+    div.innerHTML = h;
+  };
+  x.send();
+}
+
+function cargarResumen() {
+  var mes = document.getElementById('mes-r').value;
+  if (!mes || !LISTA_ID) return;
+  var div = document.getElementById('resumen-div');
+  div.innerHTML = '<p>Calculando...</p>';
+  var x = new XMLHttpRequest();
+  x.open('GET','https://api.trello.com/1/lists/'+LISTA_ID+'/cards?key='+TK+'&token='+TT, true);
+  x.onload = function() {
+    if (x.status!=200) { div.innerHTML='<p>Error</p>'; return; }
+    var cards = JSON.parse(x.responseText).filter(function(c){return c.name.indexOf(mes)>=0;});
+    if (cards.length==0) { div.innerHTML='<p>Sin datos este mes</p>'; return; }
+    var empData = {};
+    cards.forEach(function(c){
+      var e = c.name.split(' - ')[0];
+      if (!empData[e]) empData[e] = {dias:0, ent:0, sal:0};
+      var d = (c.desc||'').split('\n---\n');
+      empData[e].dias++;
+      empData[e].ent += d.filter(function(l){return l.indexOf('ENTRADA')>=0;}).length;
+      empData[e].sal += d.filter(function(l){return l.indexOf('SALIDA')>=0;}).length;
+    });
+    var html = '<table><tr><th>Empleado</th><th>Dias</th><th>Ent</th><th>Sal</th></tr>';
+    for (var e in empData) {
+      html += '<tr><td>'+e+'</td><td>'+empData[e].dias+'</td><td>'+empData[e].ent+'</td><td>'+empData[e].sal+'</td></tr>';
+    }
+    html += '</table>';
+    div.innerHTML = html;
+  };
+  x.send();
+}
+
+function registrarAusencia() {
+  var emp = document.getElementById('empleado').value;
+  if (!emp) { est('Selecciona empleado','error'); return; }
+  var tipo = document.getElementById('tipo-aus').value;
+  var fecha = document.getElementById('fecha-aus').value;
+  var titulo = emp+' - '+fecha+' ['+tipo+']';
+  var x = new XMLHttpRequest();
+  x.open('POST','https://api.trello.com/1/cards', true);
+  x.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+  x.onload = function() {
+    if (x.status==200) est(tipo+' registrado','ok');
+    else est('Error','error');
+  };
+  x.send('name='+encodeURIComponent(titulo)+'&desc='+encodeURIComponent(tipo.toUpperCase()+': '+emp+' '+fecha)+'&idList='+LISTA_ID+'&key='+TK+'&token='+TT);
+}
+
+function descargarExcel() {
+  var mes = document.getElementById('mes-r').value;
+  if (!mes || !LISTA_ID) { est('Carga resumen','error'); return; }
+  var x = new XMLHttpRequest();
+  x.open('GET','https://api.trello.com/1/lists/'+LISTA_ID+'/cards?key='+TK+'&token='+TT, true);
+  x.onload = function() {
+    if (x.status!=200) return;
+    var cards = JSON.parse(x.responseText).filter(function(c){return c.name.indexOf(mes)>=0;});
+    if (cards.length==0) { est('Sin datos','info'); return; }
+    var csv = '\uFEFFEmpleado;Fecha;Tipo;Hora;GPS\n';
+    cards.forEach(function(c){
+      var emp = c.name.split(' - ')[0];
+      var fecha = c.name.split(' - ')[1] || c.name;
+      var lines = (c.desc||'').split('\n---\n');
+      lines.forEach(function(l){
+        var t = l.indexOf('ENTRADA')>=0?'ENTRADA':(l.indexOf('SALIDA')>=0?'SALIDA':'');
+        var h = l.match(/Hora: (.+)/);
+        var g = l.match(/GPS: (.+)/);
+        if (t) csv += emp+';'+fecha+';'+t+';'+(h?h[1]:'')+';'+(g?g[1]:'')+'\n';
+      });
+    });
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'fichajes-'+mes+'.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    est('Excel descargado','ok');
+  };
+  x.send();
+}
+</script>
+</body>
+</html>
