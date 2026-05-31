@@ -131,9 +131,9 @@ table .centro { text-align:center; }
         <h4>DATOS DEL CLIENTE</h4>
         <p style="font-size:11px; color:#333; line-height:1.7;" id="cliDisplay">
           <strong>Nombre:</strong> <span id="dispNombre">Galyna Buchynska</span><br>
-          <strong>CIF/NIE:</strong> <span id="dispCif">Y4430794L</span><br>
-          <strong>Dirección:</strong> <span id="dispDir">C/ Paular 7, Fuenlabrada 28944</span><br>
-          <strong>Teléfono:</strong> <span id="dispTel">627 88 14 39</span>
+          <strong>CIF/NIE:</strong> <span id="dispCif">X2608915K</span><br>
+          <strong>Dirección:</strong> <span id="dispDir">C/ Oporto 1</span><br>
+          <strong>Teléfono:</strong> <span id="dispTel">618 242 806</span>
         </p>
         <button onclick="abrirModalEditar()" style="background:none;border:1px solid #008c78;color:#008c78;padding:4px 10px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:4px;">✏️ Editar datos</button>
       </div>
@@ -149,19 +149,19 @@ table .centro { text-align:center; }
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">CIF/NIF/NIE:</label>
-            <input type="text" id="editCif" value="Y4430794L" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+            <input type="text" id="editCif" value="X2608915K" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Dirección:</label>
-            <input type="text" id="editDir" value="C/ Paular 7, Fuenlabrada 28944" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+            <input type="text" id="editDir" value="C/ Oporto 1" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Teléfono:</label>
-            <input type="text" id="editTel" value="627 88 14 39" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+            <input type="text" id="editTel" value="618 242 806" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Email:</label>
-            <input type="text" id="editEmail" value="—" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+            <input type="text" id="editEmail" value="simonreformista@gmail.com" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="display:flex;gap:8px;margin-top:14px;">
             <button onclick="cerrarModalEditar()" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;background:white;color:#666;font-size:12px;cursor:pointer;">Cancelar</button>
@@ -406,6 +406,7 @@ function aceptarYDescargar() {
   if (!btn) return;
   btn.textContent = '⏳ GENERANDO...';
   btn.disabled = true;
+  var safetyTimer = setTimeout(function(){ btn.textContent = '✅ RECARGAR'; btn.disabled = false; }, 6000);
 
   var cliente = document.getElementById('cliNombre').value.trim() || 'Cliente';
   var ahora = new Date().toLocaleString('es-ES', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
@@ -512,6 +513,7 @@ function aceptarYDescargar() {
   btn.textContent = '✅ FIRMADO';
   btn.disabled = false;
 
+  clearTimeout(safetyTimer);
   alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\n\n' +
     '📄 TXT descargado. Compártalo con nosotros por WhatsApp.');
@@ -519,14 +521,9 @@ function aceptarYDescargar() {
   // Abrir WhatsApp con el mensaje para que el cliente envie el documento
   var numPresupuesto = document.getElementById('docNum').textContent;
   var msgWhatsApp = encodeURIComponent('✅ Presupuesto ' + numPresupuesto + ' ACEPTADO Y FIRMADO.\n\n📄 Adjunto TXT y PDF.\n\nGracias.');
-  // Intentar abrir WhatsApp directamente en el movil
-  var waUrl = 'whatsapp://send?phone=34646469788&text=' + msgWhatsApp;
+  // Intentar abrir WhatsApp en el movil; si no funciona (no tiene WA), abre web
+  var waUrl = 'https://wa.me/34646469788?text=' + msgWhatsApp;
   window.open(waUrl, '_blank');
-  // Fallback: abrir WhatsApp Web si no funciona el esquema whataspp://
-  setTimeout(function(){
-    var waWebUrl = 'https://wa.me/34646469788?text=' + msgWhatsApp;
-    window.open(waWebUrl, '_blank');
-  }, 1500);
 }
 </script>
 
