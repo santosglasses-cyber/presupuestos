@@ -258,6 +258,9 @@ table .centro { text-align:center; }
         <button class="btn-main" id="btnAceptar" disabled onclick="aceptarYDescargar()">
           ▶ ACEPTAR PRESUPUESTO
         </button>
+        <p style="font-size:10px;color:#008c78;text-align:center;margin:2px 0 4px 0;font-weight:bold;">
+          Al aceptar se abrirá WhatsApp para enviarnos el documento firmado al 646 469 788
+        </p>
         <button class="btn-pdf" onclick="descargarPdf()">
           📄 DESCARGAR PDF
         </button>
@@ -513,9 +516,17 @@ function aceptarYDescargar() {
     'Nº: ' + document.getElementById('docNum').textContent + '\n\n' +
     '📄 TXT descargado. Compártalo con nosotros por WhatsApp.');
 
-  // Abrir el PDF para que el cliente lo comparta
-  var pdfUrl = window.location.href.replace('.html', '.pdf');
-  window.open(pdfUrl, '_blank');
+  // Abrir WhatsApp con el mensaje para que el cliente envie el documento
+  var numPresupuesto = document.getElementById('docNum').textContent;
+  var msgWhatsApp = encodeURIComponent('✅ Presupuesto ' + numPresupuesto + ' ACEPTADO Y FIRMADO.\n\n📄 Adjunto TXT y PDF.\n\nGracias.');
+  // Intentar abrir WhatsApp directamente en el movil
+  var waUrl = 'whatsapp://send?phone=34646469788&text=' + msgWhatsApp;
+  window.open(waUrl, '_blank');
+  // Fallback: abrir WhatsApp Web si no funciona el esquema whataspp://
+  setTimeout(function(){
+    var waWebUrl = 'https://wa.me/34646469788?text=' + msgWhatsApp;
+    window.open(waWebUrl, '_blank');
+  }, 1500);
 }
 </script>
 
