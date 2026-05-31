@@ -12,3 +12,4 @@
   from = "/pdf/*"
   to = "/.netlify/functions/generar-pdf"
   status = 200
+
