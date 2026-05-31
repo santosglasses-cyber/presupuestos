@@ -217,10 +217,7 @@ table .centro { text-align:center; }
 
       <div class="firma-box">
       <button class="btn-modal" onclick="abrirModal()">📝 FIRMAR Y ACEPTAR PRESUPUESTO</button>
-      <button class="btn-pdf" onclick="descargarPdf()">
-        📄 DESCARGAR PDF
-      </button>
-      <div class="sha">SHA-256/a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8</div>
+      
     </div>
 
     <!-- MODAL FIRMA -->
@@ -329,11 +326,7 @@ function checkBtn() {
 
 function abrirModal() { document.getElementById('modalFirma').classList.add('active'); }
 function cerrarModal(e) { if (!e || e.target === e.currentTarget) document.getElementById('modalFirma').classList.remove('active'); }
-function descargarPdf() {
-  // Abre el PDF en nueva pestaña
-  var url = 'https://santosglasses-cyber.github.io/presupuestos/P-260289_Galyna_Buchynska.pdf';
-  window.open(url, '_blank');
-}
+
 
 function aceptarYDescargar() {
   var btn = document.getElementById('btnAceptar');
@@ -392,7 +385,6 @@ function aceptarYDescargar() {
     '<span style="font-size:9px;color:#999;">Anote este código para validar su firma</span>';
 
   // Abrir PDF en nueva pestaña
-  descargarPdf();
 
   // Abrir correo de confirmación
   window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
