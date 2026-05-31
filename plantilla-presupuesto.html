@@ -133,6 +133,9 @@ table .centro { text-align:center; }
           <strong>Nombre:</strong> <span id="dispNombre">—</span><br>
           <strong>CIF/NIF:</strong> <span id="dispCif">—</span><br>
           <strong>Dirección:</strong> <span id="dispDir">—</span><br>
+          <strong>Localidad:</strong> <span id="dispLocalidad">—</span><br>
+          <strong>C.P.:</strong> <span id="dispCP">—</span><br>
+          <strong>Provincia:</strong> <span id="dispProvincia">—</span><br>
           <strong>Teléfono:</strong> <span id="dispTel">—</span>
         </p>
         <button onclick="abrirModalEditar()" style="background:none;border:1px solid #008c78;color:#008c78;padding:4px 10px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:4px;">✏️ Editar datos</button>
@@ -154,6 +157,18 @@ table .centro { text-align:center; }
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Dirección:</label>
             <input type="text" id="editDir" value="" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Localidad:</label>
+            <input type="text" id="editLocalidad" value="" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">C.P.:</label>
+            <input type="text" id="editCP" value="" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Provincia:</label>
+            <input type="text" id="editProvincia" value="" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Teléfono:</label>
@@ -285,6 +300,9 @@ function abrirModalEditar() {
   document.getElementById('editNombre').value = document.getElementById('dispNombre').textContent;
   document.getElementById('editCif').value = document.getElementById('dispCif').textContent;
   document.getElementById('editDir').value = document.getElementById('dispDir').textContent;
+  document.getElementById('editLocalidad').value = document.getElementById('dispLocalidad').textContent;
+  document.getElementById('editCP').value = document.getElementById('dispCP').textContent;
+  document.getElementById('editProvincia').value = document.getElementById('dispProvincia').textContent;
   document.getElementById('editTel').value = document.getElementById('dispTel').textContent;
   document.getElementById('msjEditar').textContent = '';
   document.getElementById('modalEditar').style.display = 'flex';
@@ -301,6 +319,9 @@ function guardarDatosCliente() {
     nombre: document.getElementById('editNombre').value.trim(),
     cif: document.getElementById('editCif').value.trim(),
     direccion: document.getElementById('editDir').value.trim(),
+    localidad: document.getElementById('editLocalidad').value.trim(),
+    cp: document.getElementById('editCP').value.trim(),
+    provincia: document.getElementById('editProvincia').value.trim(),
     telefono: document.getElementById('editTel').value.trim(),
     email: document.getElementById('editEmail').value.trim()
   };
@@ -308,6 +329,9 @@ function guardarDatosCliente() {
   document.getElementById('dispNombre').textContent = datos.nombre;
   document.getElementById('dispCif').textContent = datos.cif;
   document.getElementById('dispDir').textContent = datos.direccion;
+  document.getElementById('dispLocalidad').textContent = datos.localidad;
+  document.getElementById('dispCP').textContent = datos.cp;
+  document.getElementById('dispProvincia').textContent = datos.provincia;
   document.getElementById('dispTel').textContent = datos.telefono;
   // Enviar a API
   var apiUrl = 'https://santos-glasses-api.onrender.com/api/actualizar-cliente';
