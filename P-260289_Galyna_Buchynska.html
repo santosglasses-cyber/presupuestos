@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuesto Santos Glasses</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',Arial,sans-serif; background:#e0f0ec; padding:20px; color:#2d2d2d; }
+.page { max-width:800px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,140,120,0.15); overflow:hidden; }
+.content { padding:20px 24px; }
+.header { text-align:center; margin-bottom:16px; }
+.header h1 { color:#008c78; font-size:22px; font-weight:800; }
+.header p { font-size:11px; color:#888; }
+.doc-meta { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid #008c78; }
+.doc-meta .num { font-size:16px; font-weight:800; color:#008c78; }
+.doc-meta .fecha { font-size:11px; color:#999; }
+.cliente-box { border:1.5px solid #008c78; border-radius:8px; padding:8px 12px; margin:8px 0; background:#fafffe; }
+.cliente-box h4 { font-size:10px; color:#1a5276; font-weight:700; margin-bottom:4px; }
+.cliente-box p { font-size:11px; margin:1px 0; color:#555; }
+.cliente-box p strong { font-size:11px; color:#666; }
+table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+table th { background:#008c78; color:white; padding:8px 6px; text-align:left; font-size:11px; font-weight:700; }
+table th:first-child { border-radius:6px 0 0 0; }
+table th:last-child { border-radius:0 6px 0 0; }
+table td { padding:5px 5px; border-bottom:1px solid #e0e0e0; font-size:13px; }
+table tr:last-child td { border-bottom:2.5px solid #008c78; }
+.precio { text-align:right; font-weight:700; font-family:monospace; white-space:nowrap; }
+.centro { text-align:center; }
+.totals { text-align:right; margin:8px 0; }
+.totals p { font-size:14px; margin:4px 0; }
+.totals .big { font-size:26px; font-weight:800; color:#008c78; margin-top:8px; }
+.info-box { border:1px solid #008c78; border-radius:10px; padding:8px 12px; margin:8px 0; background:#f0faf7; }
+.info-box h4 { font-size:10px; color:#1a5276; font-weight:700; }
+.info-box p { font-size:10px; color:#666; margin-top:2px; }
+.info-box .result { font-size:13px; font-weight:700; color:#008c78; }
+.pago-box { padding:8px 12px; margin:8px 0; background:#fff8f0; border-radius:8px; }
+.pago-box h4 { font-size:10px; color:#cc0000; font-weight:700; }
+.pago-box p { font-size:10px; color:#555; }
+.notas { padding:6px 0; font-size:9.5px; color:#555; line-height:1.5; }
+.footer { text-align:center; padding:12px; font-size:9px; color:#aaa; border-top:1px solid #eee; margin-top:12px; }
+@media print {
+  body { background:white; padding:0; }
+  .page { box-shadow:none; border-radius:0; }
+  .totals .big { font-size:24px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+<div class="header">
+  <h1>Cristalería Santos Glasses</h1>
+  <p>Joaquín Castro S.L. · CIF: 78574837</p>
+  <p>C/ Concordia 11 Posterior · 28931 Móstoles · Madrid</p>
+  <p>Tel: 646 469 788 · admin@cristaleriasantosglasses.com</p>
+</div>
+
+<div class="doc-meta">
+  <span class="num">PRESUPUESTO P-260289</span>
+  <span class="fecha">31 de mayo de 2026</span>
+</div>
+
+<div class="cliente-box">
+  <h4>CLIENTE</h4>
+  <p><strong>Galyna Buchynska</strong> · NIF: Y4430794L</p>
+  <p>C/ Paular 7, Fuenlabrada, 28944</p>
+</div>
+
+<p style="font-size:12px; color:#555; margin:6px 0;">
+  <strong>Producto:</strong> Espejo 5 mm · Canto pulido<br>
+  <strong>Medidas:</strong> 148 × 93 cm &nbsp;|&nbsp; <strong>Superficie:</strong> 1,38 m²<br>
+  <strong>Peso aprox.:</strong> 17,21 kg &nbsp;|&nbsp; <strong>Validez:</strong> 15 días
+</p>
+
+<table>
+<tr>
+  <th>CONCEPTO</th>
+  <th>MEDIDA</th>
+  <th style="text-align:right">PRECIO</th>
+  <th style="text-align:right">IMPORTE</th>
+</tr>
+<tr>
+  <td>Espejo PL 05 (5 mm)</td>
+  <td>1,38 m²</td>
+  <td class="precio">70,69 €/m²</td>
+  <td class="precio">97,30 €</td>
+</tr>
+<tr>
+  <td>Canto pulido recto</td>
+  <td>4,82 ml</td>
+  <td class="precio">3,50 €/ml</td>
+  <td class="precio">16,87 €</td>
+</tr>
+<tr>
+  <td>Montaje</td>
+  <td>1 ud</td>
+  <td class="precio"></td>
+  <td class="precio">50,00 €</td>
+</tr>
+</table>
+
+<div class="totals">
+  <p>Subtotal: <strong>164,17 €</strong></p>
+  <p>IVA 21%: <strong>34,48 €</strong></p>
+  <p class="big">TOTAL: 198,65 €</p>
+</div>
+
+<div class="info-box">
+  <h4>INFORMACIÓN DEL PEDIDO</h4>
+  <p>Espejo 5mm incoloro · Canto pulido recto 4 cantos · Incluye colgaderos y montaje</p>
+</div>
+
+<div class="pago-box">
+  <h4>FORMA DE PAGO</h4>
+  <p>50% señal · 50% a la entrega</p>
+  <p><strong>IBAN:</strong> ES74 2100 4935 0613 0086 2186 (CaixaBank)</p>
+</div>
+
+<div class="notas">
+  <p><strong>Notas:</strong></p>
+  <p>• Presupuesto válido por 15 días desde la fecha de emisión.</p>
+  <p>• Precios no incluyen transporte. Montaje incluye mano de obra y colgaderos.</p>
+</div>
+
+<div class="footer">
+  Cristalería Santos Glasses — C/ Concordia 11 Posterior, 28931 Móstoles, Madrid — Tel: 646 469 788<br>
+  admin@cristaleriasantosglasses.com · CIF: 78574837
+</div>
+</div>
+</div>
+</body>
+</html>
