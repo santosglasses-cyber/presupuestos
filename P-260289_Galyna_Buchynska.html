@@ -107,7 +107,7 @@ table .centro { text-align:center; }
     <div class="header">
       <div class="qr-box2" id="qrBox2" style="display:none;flex-shrink:0;margin-left:auto;text-align:center;">
         <div style="font-size:7px;color:#1a5276;font-weight:700;letter-spacing:0.2px;line-height:1.1;">📱 ESCANEAR</div>
-        <div id="qrcode" style="width:100px;height:100px;margin:2px auto;background:#fff;border-radius:5px;border:1px solid #ddd;cursor:pointer;"><img src="qr-P-260289.png" style="width:100px;height:100px;display:block;" alt="QR"></div>
+        <div id="qrcode" style="width:100px;height:100px;margin:2px auto;background:#fff;border-radius:5px;border:1px solid #ddd;cursor:pointer;"></div>
         <div id="qrLink" style="font-size:6px;color:#999;line-height:1.2;word-break:break-all;max-width:120px;"></div>
       </div>
       <div class="header-logo">
@@ -396,9 +396,9 @@ function checkBtn() {
 }
 
 function descargarPdf() {
-  // Abre el diálogo de imprimir → el usuario puede guardar como PDF
-  // Esto renderiza la página exactamente como se ve (con logo, QR, etc.)
-  window.print();
+  // Abre el PDF en nueva pestaña (logo+QR incluidos)
+  var url = window.location.href.replace('.html', '.pdf');
+  window.open(url, '_blank');
 }
 
 function aceptarYDescargar() {
