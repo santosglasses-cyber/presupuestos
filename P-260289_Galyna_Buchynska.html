@@ -393,9 +393,8 @@ function checkBtn() {
 }
 
 function descargarPdf() {
-  // Abre el PDF en nueva pestaña para descargar/compartir
-  var url = window.location.href.replace('.html', '.pdf');
-  window.open(url, '_blank');
+  // Abre dialogo imprimir/compartir - genera PDF con logo y QR
+  window.print();
 }
 
 function aceptarYDescargar() {
@@ -403,7 +402,7 @@ function aceptarYDescargar() {
   if (!btn) return;
   btn.textContent = '⏳ GENERANDO...';
   btn.disabled = true;
-  var safetyTimer = setTimeout(function(){ btn.textContent = '✅ RECARGAR'; btn.disabled = false; }, 8000);
+  var safetyTimer = setTimeout(function(){ btn.textContent = '✅ REINTENTAR'; btn.disabled = false; }, 12000);
 
   var cliente = document.getElementById('cliNombre').value.trim() || 'Cliente';
   var ahora = new Date().toLocaleString('es-ES', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
