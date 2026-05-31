@@ -74,12 +74,27 @@ table .centro { text-align:center; }
 .rgpd-box p { font-size:8.5px; color:#888; line-height:1.4; margin-top:3px; }
 .footer { text-align:center; padding:12px; font-size:9px; color:#aaa; }
 @page { size: A4; margin: 15mm 15mm 15mm 15mm; }
+/* MODAL DE FIRMA */
+.modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; }
+.modal-overlay.active { display:flex; }
+.modal-box { background:white; border-radius:16px; padding:20px; max-width:380px; width:90%; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,0.2); position:relative; }
+.modal-box h3 { font-size:14px; color:#1a5276; margin-bottom:10px; font-weight:700; }
+.modal-box .firma-canvas { width:100%; height:80px; }
+.modal-box .firma-canvas canvas { width:100%; height:100%; }
+.modal-box .firma-inline { flex-direction:column; gap:8px; }
+.modal-box .firma-actions { align-self:flex-end; }
+.modal-close { position:absolute; top:8px; right:12px; font-size:20px; color:#aaa; cursor:pointer; background:none; border:none; padding:0 4px; line-height:1; }
+.modal-close:hover { color:#333; }
+
+.btn-modal { display:block; width:100%; padding:13px; background:linear-gradient(135deg,#008c78,#00a88f); color:white; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; transition:all .15s; margin:10px 0; }
+.btn-modal:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,140,120,0.25); }
+
 @media print {
 .header-logo { flex:0 0 auto; width:55%; max-width:420px; height:auto; display:flex; align-items:center; justify-content:flex-start; }
   body { background:white; padding:0; margin:0; }
   .page { box-shadow:none; border-radius:0; max-width:100%; width:100%; }
   .watermark img { opacity:0.10; }
-  .btn-main, .btn-pdf, .firma-box, .accept-row, .firma-canvas, .firma-actions, .sha { display:none !important; }
+  .btn-main, .btn-pdf, .btn-modal, .firma-box, .accept-row, .firma-canvas, .firma-actions, .modal-overlay, .sha { display:none !important; }
   .cliente-box input, .cliente-box textarea { border:none; background:transparent; padding:0; font-size:10px; color:#555; }
 .header-logo img { width:100%; height:auto; max-height:90px; object-fit:contain; }
   .totals .big { font-size:24px; }
@@ -186,34 +201,35 @@ table .centro { text-align:center; }
         </p>
       </div>
 
-      <div class="firma-box">
-        <h4>🔐 PANEL DE CERTIFICACIÓN Y FIRMA ELECTRÓNICA</h4>
-                <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10.5px;color:#856404;line-height:1.4;">
-          📱 <strong>IMPORTANTE:</strong> Si está en Telegram, pulse los tres puntos <strong>⋯</strong> → <strong>Abrir en…</strong> → <strong>Safari / Chrome</strong> para poder firmar y descargar.<br>
-          En iPhone, deslice hacia abajo el presupuesto y toque <strong>«Abrir en Safari»</strong>.
-        </div>
-        <p>Al realizar el trazado de su firma, usted declara su conformidad absoluta con las especificaciones técnicas del cristal, medidas de taller, importes descritos y condiciones generales de JOAQUÍN CASTRO S.L.</p>
-        <div class="firma-inline">
-          <div class="firma-canvas">
-            <canvas id="fCanvas" width="220" height="75"></canvas>
-            <span class="hint">✍️ Firme aquí</span>
+      <button class="btn-modal" onclick="abrirModal()">📝 FIRMAR Y ACEPTAR PRESUPUESTO</button>
+
+      <button class="btn-pdf" onclick="descargarPdf()">
+        📄 DESCARGAR PDF
+      </button>
+
+      <!-- MODAL FIRMA -->
+      <div class="modal-overlay" id="modalFirma" onclick="cerrarModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+          <button class="modal-close" onclick="cerrarModal()">✕</button>
+          <h3>🔐 FIRMA ELECTRÓNICA</h3>
+          <p style="font-size:10.5px;color:#555;line-height:1.4;">Al realizar el trazado de su firma, usted declara su conformidad absoluta con las especificaciones técnicas, medidas de taller, importes descritos y condiciones generales.</p>
+          <div class="firma-inline">
+            <div class="firma-canvas">
+              <canvas id="fCanvas" width="220" height="75"></canvas>
+              <span class="hint">✍️ Firme aquí</span>
+            </div>
+            <div class="firma-actions">
+              <button onclick="clearFirma()">🗑 Borrar</button>
+            </div>
           </div>
-          <div class="firma-actions">
-            <button onclick="clearFirma()">🗑 Borrar</button>
+          <div class="accept-row">
+            <input type="checkbox" id="acceptCheck" onchange="checkBtn()">
+            <label for="acceptCheck">He leído y acepto la política de tratamiento de datos para el procesado industrial de mi pedido, conforme a la LOPDGDD y RGPD.</label>
           </div>
+          <button class="btn-main" id="btnAceptar" disabled onclick="aceptarYDescargar()">
+            ▶ ACEPTAR PRESUPUESTO
+          </button>
         </div>
-        <div class="accept-row">
-          <input type="checkbox" id="acceptCheck" onchange="checkBtn()">
-          <label for="acceptCheck">He leído y acepto la política de tratamiento de datos para el procesado industrial de mi pedido, conforme a la LOPDGDD y RGPD.</label>
-        </div>
-        <button class="btn-main" id="btnAceptar" disabled onclick="aceptarYDescargar()">
-          ▶ ACEPTAR PRESUPUESTO
-        </button>
-        <button class="btn-pdf" onclick="descargarPdf()">
-          📄 DESCARGAR PDF
-        </button>
-        <p style="font-size:8px;color:#aaa;text-align:center;margin-top:4px;">Al pulsar, selecciona «Guardar como PDF» en el destino de impresión.</p>
-        <div class="sha">SHA-256/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
       </div>
 
       <div class="panel">
@@ -279,6 +295,9 @@ table .centro { text-align:center; }
   canvas.addEventListener('touchend', stop, { passive: false });
 })();
 
+function abrirModal() { document.getElementById('modalFirma').classList.add('active'); }
+function cerrarModal(e) { if (!e || e.target === e.currentTarget) document.getElementById('modalFirma').classList.remove('active'); }
+
 function clearFirma() {
   var c = document.getElementById('fCanvas');
   if (!c) return;
@@ -296,7 +315,11 @@ function checkBtn() {
 }
 
 function descargarPdf() {
-  window.print();
+  // Intenta abrir el PDF del repositorio si existe
+  var num = document.getElementById('docNum').textContent.trim() || 'presupuesto';
+  var nom = document.getElementById('cliNombre').value.trim().replace(/ /g, '_') || 'Cliente';
+  var pdfUrl = 'https://santosglasses-cyber.github.io/presupuestos/' + num + '_' + nom + '.pdf';
+  window.open(pdfUrl, '_blank');
 }
 
 function aceptarYDescargar() {
@@ -308,9 +331,19 @@ function aceptarYDescargar() {
   var cliente = document.getElementById('cliNombre').value.trim() || 'Cliente';
   var ahora = new Date().toLocaleString('es-ES', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
 
+  // Generar código aleatorio de 12 caracteres
+  var chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  var codigo = '';
+  var ahoraNum = Date.now().toString(36).toUpperCase();
+  for (var i = 0; i < 12; i++) {
+    codigo += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  codigo = codigo.substring(0, 4) + '-' + codigo.substring(4, 8) + '-' + codigo.substring(8, 12);
+
   // Render firma en el HTML
   var firmaCanvas = document.getElementById('fCanvas');
-  if (firmaCanvas && window.hasSig) {    var firmaImg = document.createElement('img');
+  if (firmaCanvas && window.hasSig) {
+    var firmaImg = document.createElement('img');
     firmaImg.src = firmaCanvas.toDataURL('image/png');
     firmaImg.style.width = '200px';
     firmaImg.style.height = '65px';
@@ -319,75 +352,102 @@ function aceptarYDescargar() {
     firmaImg.style.display = 'block';
     firmaImg.style.margin = '6px 0';
     firmaImg.id = 'firmaRender';
-    var old = document.getElementById('firmaRender');    if (old) old.remove();
-    var parent = firmaCanvas.closest('.firma-inline') || firmaCanvas.parentNode;    if (parent) parent.after(firmaImg);
+    var old = document.getElementById('firmaRender');
+    if (old) old.remove();
+    var parent = firmaCanvas.closest('.firma-inline') || firmaCanvas.parentNode;
+    if (parent) parent.after(firmaImg);
   }
+
   var fechaFirma = document.getElementById('fechaFirma');
-  if (!fechaFirma) {    fechaFirma = document.createElement('p');
+  if (!fechaFirma) {
+    fechaFirma = document.createElement('p');
     fechaFirma.id = 'fechaFirma';
     fechaFirma.style.cssText = 'font-size:10px;color:#008c78;font-weight:bold;margin:4px 0;';
-    var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');    if (ref) ref.before(fechaFirma);
+    var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
+    if (ref) ref.before(fechaFirma);
   }
   fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
-  var txt = '';
-  txt += '╔══════════════════════════════════════════════════╗\n';
-  txt += '║  PRESUPUESTO ELECTRÓNICO                        ║\n';
-  txt += '║  Santos Glasses - Joaquín Castro S.L.           ║\n';
-  txt += '╚══════════════════════════════════════════════════╝\n\n';
-  txt += 'Nº: ' + (document.getElementById('docNum').textContent) + '\n';
-  txt += 'Fecha: ' + (document.getElementById('docDate').textContent) + '\n\n';
-  txt += '─ CLIENTE ────────────────────────────────────────────\n';
-  txt += '  ' + cliente + '\n';
-  txt += '  Tel: ' + document.getElementById('cliTel').value.trim() + '\n';
-  txt += '  Email: ' + document.getElementById('cliEmail').value.trim() + '\n';
-  txt += '  Dirección: ' + document.getElementById('cliDir').value.trim() + '\n';
-  txt += '  CIF/NIF: ' + document.getElementById('cliCif').value.trim() + '\n';
-  txt += '\n';
-  txt += '─ CONCEPTOS ──────────────────────────────────────────\n';
-  var filas = document.querySelectorAll('table tbody tr');
-  filas.forEach(function(tr) {
-    var celdas = tr.querySelectorAll('td');
-    if (celdas.length >= 7) {
-      txt += '  ' + celdas[0].textContent.trim() + ' ... ' + celdas[6].textContent.trim() + '\n';
-    }
-  });
-  txt += '\n─ RESUMEN ─────────────────────────────────────────────\n';
-  txt += '  Total documento:    ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '0,00 €') + '\n';
-  txt += '\n─ PAGO ──────────────────────────────────────────────\n';
-  txt += '  CaixaBank · IBAN: ES74 2100 4935 0613 0086 2186\n';
-  txt += '  50% señal · 50% resto a la entrega\n\n';
-  txt += '─ RESERVA DE DOMINIO MERCANTIL ───────────────────────\n';
-  txt += '  El material es propiedad de Joaquín Castro S.L.\n';
-  txt += '  hasta el abono íntegro del documento.\n\n';
-  txt += '─ CERTIFICACIÓN ELECTRÓNICA ──────────────────────────\n';
-  txt += '  ✓ FIRMADO ELECTRÓNICAMENTE\n';
-  txt += '  Fecha: ' + ahora + '\n\n';
-  txt += '╔══════════════════════════════════════════════════╗\n';
-  txt += '║  Santos Glasses                                 ║\n';
-  txt += '║  C/ Concordia 11 posterior, 28931 Móstoles, Madrid        ║\n';
-  txt += '║  Tlf: 646 469 788                               ║\n';
-  txt += '║  info@cristaleriasantosglasses.com              ║\n';
-  txt += '╚══════════════════════════════════════════════════╝\n';
 
-  var blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.setAttribute('download', (document.getElementById('docNum').textContent) + '_' + cliente.replace(/ /g, '_') + '.txt');
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Añadir código de comprobante visible
+  var codigoEl = document.getElementById('codigoFirma');
+  if (!codigoEl) {
+    codigoEl = document.createElement('div');
+    codigoEl.id = 'codigoFirma';
+    codigoEl.style.cssText = 'margin:8px 0;padding:10px;background:#f0faf8;border:1px solid #008c78;border-radius:8px;text-align:center;';
+    fechaFirma.after(codigoEl);
+  }
+  codigoEl.innerHTML = '<span style="font-size:10px;color:#666;">CÓDIGO DE COMPROBANTE</span><br>' +
+    '<span style="font-size:18px;font-weight:bold;color:#008c78;letter-spacing:3px;font-family:monospace;">' + codigo + '</span><br>' +
+    '<span style="font-size:9px;color:#999;">Anote este código para validar su firma</span>';
 
-  window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
+  // Abrir PDF
+  descargarPdf();
 
-  alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
+  // Abrir correo de confirmación (respaldo)
+  window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica\nCódigo: ' + codigo), '_blank');
+
+  // Enviar por API al backend de Render
+  var cliEmail = (document.getElementById('cliEmail') ? document.getElementById('cliEmail').value.trim() : '');
+  var cliTel = (document.getElementById('cliTel') ? document.getElementById('cliTel').value.trim() : '');
+  var firmaData = (firmaCanvas && window.hasSig) ? firmaCanvas.toDataURL('image/png') : '';
+  enviarFirmaAPI(
+    document.getElementById('docNum').textContent,
+    cliente,
+    cliEmail,
+    cliTel,
+    codigo,
+    firmaData,
+    ahora
+  );
+
+  alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\nCódigo: ' + codigo + '\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
-    '📁 Archivo descargado en su dispositivo\n' +
+    '📄 PDF abierto en nueva pestaña\n' +
     '📧 Correo abierto como respaldo');
 
-  btn.textContent = '▶ ACEPTAR PRESUPUESTO';
-  btn.disabled = false;
+  btn.textContent = '✅ ACEPTADO';
+  btn.disabled = true;
+}
+
+// API integration: envía firma al backend
+// Despertar Render al cargar la pagina (plan gratuito se duerme)
+(function despertarRender() {
+  fetch('https://santos-glasses-api.onrender.com/api/health', { method: 'GET', mode: 'no-cors' });
+})();
+
+async function enviarFirmaAPI(presupuesto, cliente, email, telefono, codigo, firmaImg, fecha) {
+  const API_URL = 'https://santos-glasses-api.onrender.com/api/firmar';
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (resp.ok) console.log('✅ Email enviado via API');
+    else console.log('⚠️ API error (' + resp.status + ')');
+  } catch(e) {
+    console.log('⚠️ API no disponible, se uso mailto como respaldo');
+  }
+  
+  // INTENTO 2: Proxy local directo
+  try {
+    const controller2 = new AbortController();
+    setTimeout(() => controller2.abort(), 15000);
+    await fetch('http://76.13.36.216:33500/api/enviar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ presupuesto, cliente, email, telefono, codigo, firmaImg, fecha }),
+      signal: controller2.signal,
+      mode: 'no-cors'
+    });
+    console.log('✅ Email enviado via proxy local');
+  } catch(e) {
+    console.log('⚠️ Proxy local no disponible');
+  }
 }
 </script>
 </body>
