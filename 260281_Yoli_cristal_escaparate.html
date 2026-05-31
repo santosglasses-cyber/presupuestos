@@ -352,6 +352,12 @@ function guardarDatosCliente() {
     btn.disabled = false;
     btn.textContent = '💾 Guardar';
   });
+  // También notificar a Paco via ntfy.sh
+  var nMsg = '✏️ ' + document.getElementById('docNum').textContent + ' - ' + datos.nombre + ' actualizó sus datos\nDir: ' + datos.direccion + '\nLoc: ' + datos.localidad + ' ' + datos.cp + ' ' + datos.provincia + '\nTel: ' + datos.telefono + '\nEmail: ' + datos.email;
+  fetch('https://ntfy.sh/santosglasses-act', {
+    method: 'POST',
+    body: nMsg
+  }).catch(function(){});
 }
 // === FIN MODAL ===
 
