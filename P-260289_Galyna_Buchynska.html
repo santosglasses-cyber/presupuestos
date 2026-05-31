@@ -262,7 +262,7 @@ table .centro { text-align:center; }
           Al aceptar se abrirá WhatsApp para enviarnos el documento firmado al 646 469 788
         </p>
         <button class="btn-pdf" onclick="descargarPdf()">
-          📄 DESCARGAR PDF
+          🖨️ IMPRIMIR / GUARDAR PDF
         </button>
         <p style="font-size:8px;color:#aaa;text-align:center;margin-top:4px;">En iPhone: pulse el icono de «Compartir» ↑ y seleccione «Imprimir» → gesto de pellizcar hacia fuera para guardar PDF.</p>
         <div class="sha">SHA-256/a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8</div>
@@ -396,9 +396,9 @@ function checkBtn() {
 }
 
 function descargarPdf() {
-  // Abre el PDF en nueva pestaña para descargar/compartir
-  var url = window.location.href.replace('.html', '.pdf');
-  window.open(url, '_blank');
+  // Abre el diálogo de imprimir → el usuario puede guardar como PDF
+  // Esto renderiza la página exactamente como se ve (con logo, QR, etc.)
+  window.print();
 }
 
 function aceptarYDescargar() {
