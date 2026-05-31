@@ -429,12 +429,12 @@ function aceptarYDescargar() {
 
   // Insert fecha de firma visible
   var fechaFirma = document.getElementById('fechaFirma');
-  if (!fechaFirma) {
+  var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
+  if (!fechaFirma && ref) {
     fechaFirma = document.createElement('p');
     fechaFirma.id = 'fechaFirma';
     fechaFirma.style.cssText = 'font-size:10px;color:#008c78;font-weight:bold;margin:4px 0;';
-    var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
-    if (ref) ref.before(fechaFirma);
+    ref.before(fechaFirma);
   }
   fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
 
@@ -510,10 +510,12 @@ function aceptarYDescargar() {
   btn.disabled = false;
 
   alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
-    'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
-    '📁 Archivo descargado en su dispositivo');
+    'Nº: ' + document.getElementById('docNum').textContent + '\n\n' +
+    '📄 TXT descargado. Compártalo con nosotros por WhatsApp.');
 
-  window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
+  // Abrir el PDF para que el cliente lo comparta
+  var pdfUrl = window.location.href.replace('.html', '.pdf');
+  window.open(pdfUrl, '_blank');
 }
 </script>
 

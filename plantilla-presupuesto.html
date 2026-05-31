@@ -456,12 +456,12 @@ function aceptarYDescargar() {
 
   // Insert fecha de firma visible
   var fechaFirma = document.getElementById('fechaFirma');
-  if (!fechaFirma) {
+  var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
+  if (!fechaFirma && ref) {
     fechaFirma = document.createElement('p');
     fechaFirma.id = 'fechaFirma';
     fechaFirma.style.cssText = 'font-size:10px;color:#008c78;font-weight:bold;margin:4px 0;';
-    var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
-    if (ref) ref.before(fechaFirma);
+    ref.before(fechaFirma);
   }
   fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
 
@@ -534,11 +534,13 @@ function aceptarYDescargar() {
     body: '✅ PRESUPUESTO ACEPTADO\n' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente
   }).catch(function(){});
 
-  // Abrir el PDF para que el cliente lo comparta con nosotros
+  alert('\u2705 PRESUPUESTO ACEPTADO Y FIRMADO\n\nN\u00ba: ' + document.getElementById('docNum').textContent + '\n\n\uD83D\uDCC4 TXT descargado. Comp\u00e1rtalo con nosotros por WhatsApp.');
+
+  // Abrir el PDF para que el cliente lo comparta
   var pdfUrl = window.location.href.replace('.html', '.pdf');
   window.open(pdfUrl, '_blank');
 
-  btn.textContent = '✅ FIRMADO';
+  btn.textContent = '\u2705 FIRMADO';
   btn.disabled = false;
 }
 </script>
