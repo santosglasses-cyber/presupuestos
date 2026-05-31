@@ -517,6 +517,23 @@ function aceptarYDescargar() {
 
   window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
 
+  // Notificar a Render
+  fetch('https://santos-glasses-api.onrender.com/api/firmar', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      presupuesto: document.getElementById('docNum').textContent,
+      cliente: cliente,
+      email: document.getElementById('cliEmail').value.trim()
+    })
+  }).catch(function(){});
+
+  // Notificar via ntfy.sh
+  fetch('https://ntfy.sh/santosglasses-act', {
+    method: 'POST',
+    body: '✅ PRESUPUESTO ACEPTADO\n' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente
+  }).catch(function(){});
+
   alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
     'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
     '📁 Archivo descargado en su dispositivo\n' +
