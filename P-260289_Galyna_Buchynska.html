@@ -373,8 +373,8 @@ function aceptarYDescargar() {
   var filas = document.querySelectorAll('table tbody tr');
   filas.forEach(function(tr) {
     var celdas = tr.querySelectorAll('td');
-    if (celdas.length >= 7) {
-      txt += '  ' + celdas[0].textContent.trim() + ' ... ' + celdas[6].textContent.trim() + '\n';
+    if (celdas.length >= 5) {
+      txt += '  ' + celdas[0].textContent.trim() + ' | ' + celdas[1].textContent.trim() + ' | ' + celdas[4].textContent.trim() + '\n';
     }
   });
   txt += '\n─ RESUMEN ─────────────────────────────────────────────\n';
