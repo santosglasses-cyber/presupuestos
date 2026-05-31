@@ -138,9 +138,9 @@ table .centro { text-align:center; }
         <h4>DATOS DEL CLIENTE</h4>
         <p><strong>Nombre:</strong> <input type="text" id="cliNombre" value="Galyna Buchynska" style="width:260px;"></p>
         <p><strong>Teléfono:</strong> <input type="text" id="cliTel" value="618 242 806" style="width:180px;"></p>
-        <p><strong>Email:</strong> <input type="text" id="cliEmail" value="—" style="width:240px;"></p>
+        <p><strong>Email:</strong> <input type="text" id="cliEmail" value="simonreformista@gmail.com" style="width:240px;"></p>
         <p><strong>Dirección:</strong> <input type="text" id="cliDir" value="C/ Oporto 1, Móstoles, 28931" style="width:350px;max-width:100%;"></p>
-        <p><strong>CIF/NIF:</strong> <input type="text" id="cliCif" value="—" style="width:140px;"></p>
+        <p><strong>CIF/NIF:</strong> <input type="text" id="cliCif" value="X2608915K" style="width:140px;"></p>
       </div>
 
       <table>
@@ -154,46 +154,39 @@ table .centro { text-align:center; }
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="centro">1</td>
-            <td>Doble acristalamiento 4+4/16/4+4 laminar</td>
-            <td>197 × 66,5 cm</td>
-            <td class="precio">221,53 €/m²</td>
-            <td class="precio">290,20 €</td>
-          </tr>
-          <tr>
-            <td class="centro">1</td>
-            <td>Caja gatera / taquilla</td>
-            <td>—</td>
-            <td class="precio">48,00 €</td>
-            <td class="precio">48,00 €</td>
-          </tr>
-          <tr>
-            <td class="centro">1</td>
-            <td>Mano de obra (colocación)</td>
-            <td>—</td>
-            <td class="precio">38,00 €</td>
-            <td class="precio">38,00 €</td>
-          </tr>
-          <tr>
-            <td class="centro">1</td>
-            <td>Desplazamiento</td>
-            <td>—</td>
-            <td class="precio">25,00 €</td>
-            <td class="precio">0,00 €</td>
-          </tr>
-        </tbody>
+        <tr>
+          <td class="centro"><input type="text" class="edit-number" style="width:35px;" placeholder="1"></td>
+          <td><input type="text" class="edit" style="width:95%;" Espejo de 5 mm canto pulido recto 148 x 93 cm + montaje incluido></td>
+          <td><input type="text" class="edit" style="width:88px;" 148 x 93 cm></td>
+          <td class="precio"><input type="text" class="edit-number" style="width:80px;" 198,65 €></td>
+          <td class="precio"></td>
+        </tr>
+        <tr>
+          <td class="centro"><input type="text" class="edit-number" style="width:35px;" placeholder="1"></td>
+          <td><input type="text" class="edit" style="width:95%;" Espejo de 5 mm canto pulido recto 148 x 93 cm + montaje incluido></td>
+          <td><input type="text" class="edit" style="width:88px;" 148 x 93 cm></td>
+          <td class="precio"><input type="text" class="edit-number" style="width:80px;" 198,65 €></td>
+          <td class="precio"></td>
+        </tr>
+        <tr>
+          <td class="centro"><input type="text" class="edit-number" style="width:35px;" placeholder="1"></td>
+          <td><input type="text" class="edit" style="width:95%;" Espejo de 5 mm canto pulido recto 148 x 93 cm + montaje incluido></td>
+          <td><input type="text" class="edit" style="width:88px;" 148 x 93 cm></td>
+          <td class="precio"><input type="text" class="edit-number" style="width:80px;" 198,65 €></td>
+          <td class="precio"></td>
+        </tr>
+      </tbody>
       </table>
 
       <div class="totals">
-        <p>Base imponible: <strong>376,20 €</strong></p>
+        <p>Base imponible: <strong>198,65 €</strong></p>
         <p>IVA 21%: 79,00 €</p>
         <div class="big">455,20 €</div>
       </div>
 
       <div class="panel">
         <h4>RESUMEN FINANCIERO Y LIQUIDACIÓN</h4>
-        <p>Suma Bases Imponibles: 376,20 €<br>
+        <p>Suma Bases Imponibles: 198,65 €<br>
         Descuento Comercial: 25,00 € (desplazamiento bonificado)<br>
         I.V.A. 21%: 79,00 €<br>
         <strong style="font-size:15px;color:#008c78;">TOTAL: 455,20 €</strong><br>
@@ -331,7 +324,7 @@ function abrirModal() { document.getElementById('modalFirma').classList.add('act
 function cerrarModal(e) { if (!e || e.target === e.currentTarget) document.getElementById('modalFirma').classList.remove('active'); }
 function descargarPdf() {
   // Abre el PDF en nueva pestaña
-  var url = 'https://santosglasses-cyber.github.io/presupuestos/P-260289_Celia_Sempere.pdf';
+  var url = 'https://santosglasses-cyber.github.io/presupuestos/P-260289_Galyna_Buchynska.pdf';
   window.open(url, '_blank');
 }
 
