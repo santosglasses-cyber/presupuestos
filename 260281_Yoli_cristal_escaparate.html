@@ -128,10 +128,10 @@ table .centro { text-align:center; }
       </div>
 
       <div class="cliente-box">
-        <h4>DATOS DEL CLIENTE</h4>
+        <h4>DATOS DEL CLIENTE <span style="background:#008c78;color:white;padding:1px 6px;border-radius:4px;font-size:9px;float:right;">Cód. 9999</span></h4>
         <p style="font-size:11px; color:#333; line-height:1.7;" id="cliDisplay">
           <strong>Nombre:</strong> <span id="dispNombre">Yoli</span><br>
-          <strong>Cliente:</strong> <span id="dispCif">9999 (Clientes varios)</span><br>
+          <strong>CIF/NIF:</strong> <span id="dispCif">—</span><br>
           <strong>Dirección:</strong> <span id="dispDir">—</span><br>
           <strong>Teléfono:</strong> <span id="dispTel">692 977 570</span>
         </p>
@@ -149,7 +149,7 @@ table .centro { text-align:center; }
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">CIF/NIF/NIE:</label>
-            <input type="text" id="editCif" value="9999" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+            <input type="text" id="editCif" value="—" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px;font-weight:600;color:#333;">Dirección:</label>
@@ -176,47 +176,47 @@ table .centro { text-align:center; }
           <tr>
           <th style="width:38px;">Ud.</th>
           <th>Concepto</th>
-          <th style="width:90px;">Medidas</th>
-          <th style="width:95px;" class="precio">Precio</th>
-          <th style="width:95px;" class="precio">Importe</th>
-          </tr>
+          <th>Medidas</th>
+          <th style="text-align:right;">Precio</th>
+          <th style="text-align:right;">Importe</th>
+        </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="centro">1</td>
-            <td>Espejo PL 05 (5 mm) incoloro</td>
-            <td>148 × 93 cm</td>
-            <td class="precio">70,69 €/m²</td>
-            <td class="precio">97,30 €</td>
-          </tr>
+          <td class="centro">1</td>
+          <td>Laminar 6+6+6 incoloro</td>
+          <td>205 × 187 cm</td>
+          <td class="precio">162,86 €/m²</td>
+          <td class="precio">656,33 €</td>
+        </tr>
           <tr>
-            <td class="centro">1</td>
-            <td>Canto pulido recto 4 cantos</td>
-            <td>4,82 ml</td>
-            <td class="precio">3,50 €/ml</td>
-            <td class="precio">16,87 €</td>
-          </tr>
+          <td class="centro">2</td>
+          <td>Canto pulido hasta 15 mm</td>
+          <td>7,84 ml</td>
+          <td class="precio">5,90 €/ml</td>
+          <td class="precio">46,26 €</td>
+        </tr>
           <tr>
-            <td class="centro">1</td>
-            <td>Montaje (colocación + colgaderos)</td>
-            <td>—</td>
-            <td class="precio">50,00 €</td>
-            <td class="precio">50,00 €</td>
-          </tr>
+          <td class="centro">3</td>
+          <td>Colocación (hora de operario)</td>
+          <td>—</td>
+          <td class="precio">35,00 €/h</td>
+          <td class="precio">105,00 €</td>
+        </tr>
         </tbody>
       </table>
 
       <div class="totals">
-        <p>Base imponible: <strong>807,59 €</strong></p>
-        <p>IVA 21%: 169,59 €</p>
-        <div class="big">977,18 €</div>
+        <p>Base imponible: <strong>164,17 €</strong></p>
+        <p>IVA 21%: 34,48 €</p>
+        <div class="big">198,65 €</div>
       </div>
 
       <div class="panel">
         <h4>RESUMEN FINANCIERO Y LIQUIDACIÓN</h4>
-        <p>Suma Bases Imponibles: 807,59 €<br>
-        I.V.A. 21%: 169,59 €<br>
-        <strong style="font-size:15px;color:#008c78;">TOTAL: 977,18 €</strong><br>
+        <p>Suma Bases Imponibles: 164,17 €<br>
+        I.V.A. 21%: 34,48 €<br>
+        <strong style="font-size:15px;color:#008c78;">TOTAL: 198,65 €</strong><br>
         <span class="rojo" style="font-size:9px;">RESERVA DE DOMINIO MERCANTIL</span></p>
       </div>
 
