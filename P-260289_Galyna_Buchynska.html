@@ -129,12 +129,46 @@ table .centro { text-align:center; }
 
       <div class="cliente-box">
         <h4>DATOS DEL CLIENTE</h4>
-        <p style="font-size:11px; color:#333; line-height:1.7;">
-          <strong>Nombre:</strong> Galyna Buchynska<br>
-          <strong>CIF/NIE:</strong> Y4430794L<br>
-          <strong>Dirección:</strong> C/ Paular 7, Fuenlabrada 28944<br>
-          <strong>Teléfono:</strong> 627 88 14 39
+        <p style="font-size:11px; color:#333; line-height:1.7;" id="cliDisplay">
+          <strong>Nombre:</strong> <span id="dispNombre">Galyna Buchynska</span><br>
+          <strong>CIF/NIE:</strong> <span id="dispCif">Y4430794L</span><br>
+          <strong>Dirección:</strong> <span id="dispDir">C/ Paular 7, Fuenlabrada 28944</span><br>
+          <strong>Teléfono:</strong> <span id="dispTel">627 88 14 39</span>
         </p>
+        <button onclick="abrirModalEditar()" style="background:none;border:1px solid #008c78;color:#008c78;padding:4px 10px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:4px;">✏️ Editar datos</button>
+      </div>
+
+      <!-- MODAL EDITAR CLIENTE -->
+      <div id="modalEditar" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target==this)cerrarModalEditar()">
+        <div style="background:white;max-width:400px;width:90%;border-radius:12px;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+          <h3 style="color:#008c78;font-size:16px;margin-bottom:12px;">📝 Editar datos del cliente</h3>
+          <p style="font-size:10px;color:#999;margin-bottom:10px;">Los cambios se enviarán para su actualización.</p>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Nombre:</label>
+            <input type="text" id="editNombre" value="Galyna Buchynska" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">CIF/NIF/NIE:</label>
+            <input type="text" id="editCif" value="Y4430794L" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Dirección:</label>
+            <input type="text" id="editDir" value="C/ Paular 7, Fuenlabrada 28944" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Teléfono:</label>
+            <input type="text" id="editTel" value="627 88 14 39" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <label style="font-size:11px;font-weight:600;color:#333;">Email:</label>
+            <input type="text" id="editEmail" value="—" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px;">
+            <button onclick="cerrarModalEditar()" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;background:white;color:#666;font-size:12px;cursor:pointer;">Cancelar</button>
+            <button onclick="guardarDatosCliente()" id="btnGuardarCliente" style="flex:1;padding:8px;border:none;border-radius:6px;background:#008c78;color:white;font-size:12px;font-weight:600;cursor:pointer;">💾 Guardar</button>
+          </div>
+          <div id="msjEditar" style="font-size:11px;margin-top:8px;text-align:center;"></div>
+        </div>
       </div>
 
       <table>
@@ -246,6 +280,54 @@ table .centro { text-align:center; }
 </div>
 
 <script>
+// === MODAL EDITAR CLIENTE ===
+function abrirModalEditar() {
+  document.getElementById('editNombre').value = document.getElementById('dispNombre').textContent;
+  document.getElementById('editCif').value = document.getElementById('dispCif').textContent;
+  document.getElementById('editDir').value = document.getElementById('dispDir').textContent;
+  document.getElementById('editTel').value = document.getElementById('dispTel').textContent;
+  document.getElementById('msjEditar').textContent = '';
+  document.getElementById('modalEditar').style.display = 'flex';
+}
+function cerrarModalEditar() {
+  document.getElementById('modalEditar').style.display = 'none';
+}
+function guardarDatosCliente() {
+  var btn = document.getElementById('btnGuardarCliente');
+  btn.disabled = true;
+  btn.textContent = '⏳ Guardando...';
+  var datos = {
+    presupuesto: document.getElementById('docNum').textContent,
+    nombre: document.getElementById('editNombre').value.trim(),
+    cif: document.getElementById('editCif').value.trim(),
+    direccion: document.getElementById('editDir').value.trim(),
+    telefono: document.getElementById('editTel').value.trim(),
+    email: document.getElementById('editEmail').value.trim()
+  };
+  // Actualizar en pantalla
+  document.getElementById('dispNombre').textContent = datos.nombre;
+  document.getElementById('dispCif').textContent = datos.cif;
+  document.getElementById('dispDir').textContent = datos.direccion;
+  document.getElementById('dispTel').textContent = datos.telefono;
+  // Enviar a API
+  var apiUrl = 'https://santos-glasses-api.onrender.com/api/actualizar-cliente';
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(datos)
+  }).then(function(r){return r.json();}).then(function(resp){
+    document.getElementById('msjEditar').innerHTML = '<span style="color:green;">✅ Datos enviados. Santos Glasses los actualizará.</span>';
+    setTimeout(cerrarModalEditar, 2000);
+  }).catch(function(err){
+    document.getElementById('msjEditar').innerHTML = '<span style="color:red;">⚠️ Error al enviar. Los datos se actualizaron en pantalla.</span>';
+    setTimeout(cerrarModalEditar, 3000);
+  }).finally(function(){
+    btn.disabled = false;
+    btn.textContent = '💾 Guardar';
+  });
+}
+// === FIN MODAL ===
+
 (function() {
   var canvas = document.getElementById('fCanvas');
   if (!canvas) return;
