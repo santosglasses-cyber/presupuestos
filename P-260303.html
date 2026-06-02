@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Presupuesto P-260303 - Gloria</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',Arial,sans-serif; background:#e0f0ec; padding:20px; color:#2d2d2d; }
+.page { max-width:800px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,140,120,0.15); overflow:hidden; position:relative; }
+.watermark { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.watermark img { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.15; width:55%; max-width:350px; }
+.content { position:relative; z-index:1; }
+.header { padding:14px 20px; display:flex; align-items:center; justify-content:flex-start; gap:20px; min-height:80px; }
+.header-logo img { width:520px; height:auto; max-height:200px; object-fit:contain; }
+.header-info { flex:1; min-width:0; text-align:left; padding-left:4px; }
+.header-info h1 { color:white; font-size:20px; font-weight:900; letter-spacing:-0.3px; margin:0; -webkit-text-stroke:2.5px black; text-stroke:2.5px black; paint-order:stroke fill; text-shadow:3px 3px 6px rgba(0,0,0,0.3); }
+.header-info p { color:#222222; font-size:10px; margin-top:1px; line-height:1.3; background:rgba(255,255,255,0.85); padding:4px 8px; border-radius:4px; }
+.body { padding:12px 22px; }
+.doc-meta { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+.doc-meta .num { font-size:15px; font-weight:800; color:#008c78; letter-spacing:-0.3px; }
+.doc-meta .fecha { font-size:11px; color:#999; }
+.cliente-box { border:1.5px solid #008c78; border-radius:8px; padding:6px 10px; margin:6px 0; background:#fafffe; }
+.cliente-box h4 { font-size:10px; color:#1a5276; font-weight:700; margin-bottom:3px; }
+.cliente-box p { font-size:10px; margin:1px 0; color:#555; }
+.cliente-box p strong { font-size:10px; color:#666; }
+.cliente-box input, .cliente-box textarea { font-family:inherit; padding:2px 6px; border:1px solid #ddd; border-radius:4px; font-size:11px; }
+.cliente-box input:focus, .cliente-box textarea:focus { outline:none; border-color:#008c78; }
+table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+table th { background:#008c78; color:white; padding:8px 6px; text-align:left; font-size:11px; font-weight:700; white-space:nowrap; letter-spacing:0.3px; }
+table th:first-child { border-radius:6px 0 0 0; }
+table th:last-child { border-radius:0 6px 0 0; }
+table td { padding:5px 5px; border-bottom:1px solid #e0e0e0; font-size:13px; color:#333; }
+table tr:last-child td { border-bottom:2.5px solid #008c78; }
+table .precio { text-align:right; font-weight:700; font-family:monospace; white-space:nowrap; font-size:13px; }
+table .centro { text-align:center; }
+.totals { text-align:right; margin:8px 0; }
+.totals p { font-size:14px; margin:4px 0; }
+.totals .big { font-size:26px; font-weight:800; color:#008c78; margin-top:8px; }
+.peso-box { border:1px solid #008c78; border-radius:10px; padding:8px 14px; margin:8px 0; background:#f0faf7; }
+.peso-box h4 { font-size:10px; color:#1a5276; font-weight:700; }
+.peso-box p { font-size:10px; color:#666; margin-top:2px; }
+.peso-box .result { font-size:13px; font-weight:700; color:#008c78; }
+.pago-box { padding:8px 12px; margin:8px 0; background:#fff8f0; }
+.pago-box h4 { font-size:10px; color:#cc0000; font-weight:700; }
+.pago-box p { font-size:10px; color:#555; }
+.panel { padding:4px 8px; background:white; margin:8px 0; }
+.panel h4 { font-size:9px; color:#008c78; font-weight:700; margin-bottom:2px; }
+.panel p { font-size:9.5px; color:#555; line-height:1.4; margin:1px 0; }
+.panel .rojo { color:#cc0000; }
+.panel .mono { font-family:monospace; font-weight:600; color:#008c78; font-size:11px; }
+.firma-box { padding:10px 12px; margin:10px 0; }
+.firma-box h4 { font-size:11px; color:#1a5276; font-weight:700; margin-bottom:6px; }
+.firma-box p { font-size:10.5px; color:#555; line-height:1.4; margin-bottom:8px; }
+.firma-inline { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.firma-canvas { width:220px; height:75px; border:1px dashed #bbb; border-radius:6px; position:relative; background:#fafafa; cursor:crosshair; flex-shrink:0; }
+.firma-canvas canvas { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:5px; touch-action:none; -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
+.firma-canvas .hint { position:absolute; bottom:4px; left:8px; font-size:9px; color:#ccc; font-style:italic; pointer-events:none; }
+.firma-actions button { padding:4px 10px; border:none; border-radius:4px; font-size:10px; cursor:pointer; background:#eee; color:#888; }
+.firma-actions button:hover { background:#ddd; }
+.accept-row { display:flex; align-items:flex-start; gap:8px; margin:10px 0; }
+.accept-row input[type="checkbox"] { width:15px; height:15px; accent-color:#008c78; margin-top:1px; flex-shrink:0; }
+.accept-row label { font-size:10.5px; color:#555; line-height:1.3; }
+.btn-main { display:block; width:100%; padding:13px; background:linear-gradient(135deg,#008c78,#00a88f); color:white; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; transition:all .15s; }
+.btn-main:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,140,120,0.25); }
+.btn-main:disabled { opacity:0.45; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn-pdf { display:block; width:100%; padding:10px; background:white; color:#008c78; border:2px solid #008c78; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all .15s; margin-top:8px; }
+.btn-pdf:hover { background:#f0faf7; transform:translateY(-1px); }
+.btn-pdf:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.sha { font-family:monospace; font-size:8px; color:#ccc; text-align:right; margin-top:4px; }
+.rgpd-box { border:1px solid #008c78; border-radius:10px; padding:8px 12px; margin:8px 0; background:#f9fcfb; }
+.rgpd-box h4 { font-size:9.5px; color:#1a5276; font-weight:700; }
+.rgpd-box p { font-size:8.5px; color:#888; line-height:1.4; margin-top:3px; }
+.footer { text-align:center; padding:12px; font-size:9px; color:#aaa; }
+@page { size: A4; margin: 15mm 15mm 15mm 15mm; }
+@media print {
+  .qr-box2 { display:block !important; }
+.header-logo { flex:0 0 auto; width:65%; max-width:480px; height:auto; display:flex; align-items:center; justify-content:flex-start; }
+  body { background:white; padding:0; margin:0; }
+  .page { box-shadow:none; border-radius:0; max-width:100%; width:100%; }
+  .watermark img { opacity:0.10; }
+  .btn-main, .btn-pdf, .firma-box, .accept-row, .firma-canvas, .firma-actions, .sha { display:none !important; }
+  .cliente-box input, .cliente-box textarea { border:none; background:transparent; padding:0; font-size:10px; color:#555; }
+.header-logo img { width:520px; height:auto; max-height:200px; object-fit:contain; }
+  .totals .big { font-size:24px; }
+}
+@media (max-width:600px) {
+  .qr-box2 { display:none !important; }
+  body { padding:8px; }
+.header { padding:14px 20px; display:flex; align-items:center; justify-content:flex-start; gap:20px; min-height:80px; }
+  .body { padding:12px; }
+  .doc-meta { flex-direction:column; align-items:flex-start; }
+  table { font-size:12px; }
+  table th { font-size:10px; padding:6px 4px; }
+  table td { padding:5px 4px; }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="page">
+  <div class="watermark">
+    <img src="data:image/png;base64,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" alt="">
+  </div>
+  <div class="content">
+    <div class="header">
+      <div class="qr-box2" id="qrBox2" style="display:none;flex-shrink:0;margin-left:auto;text-align:center;">
+        <div style="font-size:6px;color:#1a5276;font-weight:700;letter-spacing:0.2px;line-height:1.1;">📱 ESCANEAR</div>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAAC6CAIAAACWbMCmAAAEAElEQVR4nO3dy63cNgBA0ThIFykrxaQGF5OyUsdkl4XlBS/Dj15wzvLBI41nLoghKFHfPp/PLzDm19tvgK9ELgRyIZALgVwIfnv+6fc//jz/Pv7191/ff/jL8/08/82IkeOsOtcqb/sujC4EciGQC4FcCORC8JOZ0dO+2cHIL/+Rs6+aQcyda9U7HDnO3e/C6EIgFwK5EMiFQC4EQzOjp7mZyL5f9XNzk1WrSHdXmk5+F0YXArkQyIVALgRyIZicGZ206pf/qvWguX8z8g7fz+hCIBcCuRDIhUAuBF9gZjRibm4yYuQ4/9d50JPRhUAuBHIhkAuBXAgmZ0Z3f+evWqO5+6pVn+HJ78LoQiAXArkQyIVALgRDM6O7O6TN2XcV3L5zndxrYo7RhUAuBHIhkAuBXAh+MjP6itd93V2j2bcHwtu+C6MLgVwI5EIgFwK5EAw9z+jk84NWWbX+MvdpnPyfjli1+4TRhUAuBHIhkAuBXAi+fT6fH/70th25n07upH1yd4W3XbVoZsR/IhcCuRDIhUAuBMv2ptv3rNV9a09354Bve5qSJ72ymFwI5EIgFwK5EGxcM9q32vL+a/DmznV3/4eRIxtdCORCIBcCuRDIhWByB4bn7+q7qzYnr0N72653I6+aO9eT0YVALgRyIZALgVwIfrJmNGffXnD7VkDuXgE44m37NhhdCORCIBcCuRDIhWByb7pVu7qdfGrq254ftO8up33zRKMLgVwI5EIgFwK5EAxdTbdvTnFyXWnfcU7OcVZ9qnPv2ehCIBcCuRDIhUAuBENrRiPmVpGe3raTw93nGZ3cC919RiwmFwK5EMiFQC4EQ7t277ujf5WR+cvJO33edp+RJ71ygVwI5EIgFwK5EEzuTTdi331Gq9zd32BuNrfvziz3GbGYXAjkQiAXArkQbNybbsTbrp27e//UySvuPM+I7eRCIBcCuRDIhWDyPqNV19ed3Ov7bVa9w7nvy5oR28mFQC4EciGQC8GyNaN93rZGM3L2u6s/+45jdCGQC4FcCORCIBeCZXvTrbJv57e5PRnm7tBZNVd6237pRhcCuRDIhUAuBHIh2Lg33YiT+wnsm788ndxTbu5VnmfEdnIhkAuBXAjkQjA0M3p6/9Vid9dW5uZc++Zlqz4xowuBXAjkQiAXArkQTM6MTtq3c/W+V41YtRZ28uxGFwK5EMiFQC4EciH4AjOjVeauuBs5ztzZ5+y7Um6E0YVALgRyIZALgVwIJmdG++48mjv7qmvV7s479u3tsOqOKqMLgVwI5EIgFwK5EAzNjO7uVjcyOzi5S8OIuRnWvqc7jXCfEYvJhUAuBHIhkAvBF3ieEe9hdCGQC4FcCORCIBeCfwBnOCRJhtZi7QAAAABJRU5ErkJggg==" alt="QR" style="width:56px;height:56px;margin:1px auto;border-radius:5px;border:1px solid #ddd;cursor:pointer;" onclick="window.open('https://cristaleriasantosglasses.com','_blank')">
+        <div style="font-size:5px;color:#999;line-height:1;">online</div>
+      </div>
+      <div class="header-logo">
+        <img src="data:image/png;base64,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" alt="Santos Glasses">
+      </div>
+      <div class="header-info">
+        <h1>SANTOS GLASSES</h1>
+        <p>Cristalería Santos Glasses · Joaquín Castro S.L.<br>
+        C/ Concordia 11 posterior, 28931 Móstoles, Madrid · Tlf: 646 469 788<br>
+        info@cristaleriasantosglasses.com</p>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="doc-meta">
+        <span class="num" id="docNum">PRESUPUESTO P-260303</span>
+        <span class="fecha" id="docDate">30 de mayo de 2026</span>
+      </div>
+
+      <div class="cliente-box">
+        <h4>DATOS DEL CLIENTE</h4>
+        <p><strong>Nombre:</strong> <input type="text" id="cliNombre" value="Covei Tudor" style="width:260px;"></p>
+        <p><strong>Teléfono:</strong> <input type="text" id="cliTel" value="—" style="width:180px;"><br>
+<strong>Dirección:</strong> <input type="text" id="cliDir" value="—" style="width:260px;"></p>
+        <p><strong>Email:</strong> <input type="text" id="cliEmail" value="—" style="width:240px;"></p>
+        <p><strong>Dirección:</strong> <input type="text" id="cliDir" value="—" style="width:350px;max-width:100%;"></p>
+        <p><strong>CIF/NIF:</strong> <input type="text" id="cliCif" value="—" style="width:140px;"></p>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+          <th style="width:38px;">Ud.</th>
+          <th>Concepto</th>
+          <th style="width:90px;">Medidas</th>
+          <th style="width:95px;" class="precio">Precio</th>
+          <th style="width:95px;" class="precio">Importe</th>
+          </tr>
+        </thead>
+              <tbody>
+          <tr>
+            <td class="centro">1</td>
+            <td>Cristal Listral 130 4mm</td>
+            <td>85 × 58 cm</td>
+            <td class="precio">104,78 €/m²</td>
+            <td class="precio">51,66 €</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:11px;color:#555;margin-top:6px;"><em>Presupuesto parcial — Solo cristal de mesa 5mm con cantos pulidos y esquinas redondas</em></p>
+
+            <div class="totals">
+        <p>Base imponible: <strong>51.66 €</strong></p>
+        <p>IVA 21%: 10.85 €</p>
+        <div class="big">62.51 €</div>
+      </div>
+      </div>
+
+                  <div class="panel">
+        <h4>RESUMEN FINANCIERO Y LIQUIDACIÓN</h4>
+        <p>Suma Bases Imponibles: 51.66 €<br>
+        I.V.A. 21%: 10.85 €<br>
+        <strong style="font-size:15px;color:#008c78;">TOTAL: 62.51 €</strong></p>
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:8px 10px;margin-top:8px;font-size:12px;">
+          <strong>📌 ESTADO:</strong> Pendiente<br>
+          <span style="font-size:10px;color:#856404;">50% señal · 50% resto a la entrega</span>
+        </div>
+        <p><span class="rojo" style="font-size:9px;">RESERVA DE DOMINIO MERCANTIL</span></p>
+      </div>
+        <p><span class="rojo" style="font-size:9px;">RESERVA DE DOMINIO MERCANTIL</span></p>
+      </div>
+
+            <div class="peso-box">
+        <h4>⚖️ PESO ESTIMADO</h4>
+        <p>0,49 m² × 2,5 × 4 mm = <strong class="result">4,9 kg</strong></p>
+        <p style="font-size:9px; color:#999; margin-top:4px;">Fórmula: m² × 2,5 × grosor (mm)</p>
+      </div>
+
+      <div class="pago-box">
+        <h4>💰 FORMA DE PAGO</h4>
+        <p style="margin-top:4px;">
+          50% señal · 50% resto a la entrega<br>
+          <strong>IBAN:</strong> ES74 2100 4935 0613 0086 2186 (CAIXABANK)<br>
+          <span style="color:#aaa;font-size:9px;">Garantía: Norma UNE-EN 12150 · Cristal a medida. No hay cambios.</span>
+        </p>
+      </div>
+
+      <div class="firma-box">
+        <h4>🔐 PANEL DE CERTIFICACIÓN Y FIRMA ELECTRÓNICA</h4>
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10.5px;color:#856404;line-height:1.4;">
+          📱 <strong>IMPORTANTE:</strong> Si está en Telegram, pulse los tres puntos <strong>⋯</strong> → <strong>Abrir en…</strong> → <strong>Safari / Chrome</strong> para poder firmar y descargar.<br>
+          En iPhone, deslice hacia abajo el presupuesto y toque <strong>«Abrir en Safari»</strong>.
+        </div>
+        <p>Al realizar el trazado de su firma, usted declara su conformidad absoluta con las especificaciones técnicas del cristal, medidas de taller, importes descritos y condiciones generales de JOAQUÍN CASTRO S.L.</p>
+        <div class="firma-inline">
+          <div class="firma-canvas">
+            <canvas id="fCanvas" width="220" height="75"></canvas>
+            <span class="hint">✍️ Firme aquí</span>
+          </div>
+          <div class="firma-actions">
+            <button onclick="clearFirma()">🗑 Borrar</button>
+          </div>
+        </div>
+        <div class="accept-row">
+          <input type="checkbox" id="acceptCheck" onchange="checkBtn()">
+          <label for="acceptCheck">He leído y acepto la política de tratamiento de datos para el procesado industrial de mi pedido, conforme a la LOPDGDD y RGPD.</label>
+        </div>
+        <button class="btn-main" id="btnAceptar" disabled onclick="aceptarYDescargar()">
+          ▶ ACEPTAR PRESUPUESTO
+        </button>
+        <button class="btn-pdf" onclick="descargarPdf()">
+          📄 DESCARGAR PDF
+        </button>
+        <p style="font-size:8px;color:#aaa;text-align:center;margin-top:4px;">En iPhone: pulse el icono de «Compartir» ↑ y seleccione «Imprimir» → gesto de pellizcar hacia fuera para guardar PDF.</p>
+        <div class="sha">SHA-256/a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8</div>
+      </div>
+
+      <div class="panel">
+
+      <div class="rgpd-box">
+        <h4>[ SELLO CE ] RGPD / LOPDGDD — PROTECCIÓN DE DATOS</h4>
+        <p>Los datos de carácter personal facilitados por el cliente y los que se generen durante el desarrollo de la relación comercial serán tratados de forma estrictamente confidencial por el Responsable del Tratamiento: JOAQUÍN CASTRO S.L. (Marca comercial: Santos Glasses), con la finalidad exclusiva de gestiones administrativa, contable, fiscal y logística del servicio de cristalería solicitado. Base jurídica: ejecución del contrato mercantil. Datos conservados plazos legales.</p>
+      </div>
+    </div>
+
+    /div>
+      </div>
+      <div>
+     </div>
+    </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px;margin:10px 0;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;background:#f9fcfb;">
+      <div style="text-align:center;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJsAAACbCAIAAAD6A37bAAADdklEQVR4nO2dy20dMQwA48BdpCwX4xpcjMtKHS/HADpwQZCU1rMzN8P7exoQICSKenu9Xr8ExO/THyDNaJSGRmlolMb78vefj889L/77/RW8d/lvTHxv5ckVTo2kMUpDozQ0SkOjNNbMaKExj4gzhfhFlSwj9eTKZ8T3bhtJY5SGRmlolIZGaVxkRgupDKUxF0glLJUppG0TTHMjaYzS0CgNjdLQKI1cZjRHJVOozAql/ht/xk0wRmlolIZGaWiUxl0yo5hUwhIT3/sTU6EFY5SGRmlolIZGaeQyo22pQWXuZtvFldGYG0ljlIZGaWiUhkZpXGRG2zZYpWhcEWt88lwReQpjlIZGaWiUhkZprJnRPReMts3dNBZGnxpJY5SGRmlolIZGaVz0M5rrK1ShMjuT+oFzPyGmUlNujNLQKA2N0tAojbelB/apffkLc3vr52qsT608mhnB0SgNjdLQKI3S3rTGBoyN803bkrtTjZPs9PgsNEpDozQ0SqNzzqhxOuYmS2+pJ28r9Y4fZYzS0CgNjdLQKI1cBXbcbTpmLueqcGqbW3xx6skLxigNjdLQKA2N0ljnjFI07hFrnDTZtsYX44my0oNGaWiUhkZp5PamVbZ9zfVUPNVXqLGgqTH1M0ZpaJSGRmlolMbFatq2o+hj5noJxBfHNK48Nn6VMUpDozQ0SkOjNC7mjGIazyDbVr29rZ/RXEsD64yehUZpaJSGRmlc7NpvrAyuEKczc+U/p+qM7PQo/9EoDY3S0CiNztNBGuuMKmwrfU7la41lVtYZPQuN0tAoDY3S6NybFnNq+WxbbdTcWpv9jB6NRmlolIZGaeTqjCqLa3Nb/E9R+YzUODtn9Gg0SkOjNDRKozRn1MhN+mdvK7me221njNLQKA2N0tAojdLetAqNm8JSBdmNh53FnGp4YIzS0CgNjdLQKI3OvWkxcyXIjenMwtz+stTF9jN6NBqloVEaGqVxkRkt3GR1adv8S6UFeIrGn2+M0tAoDY3S0CiNXGY0x9xBadtOdq2s0zW+yBiloVEaGqWhURp3yYwqpNba4ntTL0qx7TQ3Y5SGRmlolIZGaeQyo7ku1/GLGo8hSd2borGYu1IqZYzS0CgNjdLQKI2LzOhH9JOu1GfHVM6M9dw06UGjNDRKQ6M07tLPSLowRmlolIZGaWiUxj8WfCQL++UyFwAAAABJRU5ErkJggg==" alt="QR Web" style="width:52px;height:52px;">
+        <div style="font-size:8px;color:#888;margin-top:2px;">Escanea el QR</div>
+        <div style="font-size:7px;color:#aaa;">cristaleriasantosglasses.com</div>
+      </div>
+      <div style="text-align:center;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMMAAADDCAIAAACwHTL9AAAFEElEQVR4nO3d0ZEktRKGUSDwArMwBhswBrOwY+97PagR+lLV3DjnbSN6qqpn/1Bka7JTP//48eMnOPbL2w/A/wlJoiFJNCSJxq+Pf//2+x93bvz3X3/+8/s+Xrx2cqmtt79+C9fe4NaNQo/7WpNoSBINSaIhSTSeFffDViW4FhazW7bq4rmn2qr01y8+eeYT6/drTaIhSTQkiYYk0fhQcT+ENebJjcIqcn3lk0o/3Im+9geAkytbk2hIEg1JoiFJNPYq7jknHRrhLva6IL32gWN9qWt9I1usSTQkiYYk0ZAkGt9ScYcl9sl9t5zU1GGTyZewJtGQJBqSREOSaOxV3NfaOdZOWjLCXuytZo9wX36u0j9hTaIhSTQkiYYk0fhQcV9rYDgpOd+qqcOnmivPr/0PWpNoSBINSaIhSTR+/s553CdF5VzDxrVCeG6y4BxrEg1JoiFJNCSJxod53G/tn55Uzdd6Tt6aNxJW+uGevjWJhiTRkCQakkTjwx733I7w+sUPc4Ow148RVq9zjerXrN+CNYmGJNGQJBqSRONoVslbrRFz0/KuPcZb00jCIen2uBkhSTQkiYYk0Rjs477Wi/0w11ZxrS6eO80ypOJmhCTRkCQakkTjWXFf64W4dmL61s+uvbUxHY4hXF/55MXWJBqSREOSaEgSjcE+7rW5Q22+pOfk2tHsc5fa+t+3JtGQJBqSREOSaOx1lbzV+xH+7PpSc0dfXiux5z7KrB/DmkRDkmhIEg1JovFhOuCWt+Zir821kVz7/LH1VFsvDr/7ak2iIUk0JImGJNG4d8r7tYPM1/fdcjKe+9qxmSe1/PpGW786axINSaIhSTQkicaz4g5rzLkN4msvvjZxe66NfesxTi5lTaIhSTQkiYYk0fiwx32yQ/owV72ePNVcm/NbgwbDrfatK1uTaEgSDUmiIUk0PkwHXPvOvuaTS11z7e1vMR2Q90kSDUmiIUk0jrpKTn52q4M43In+km9drm907TPEyRmbD9YkGpJEQ5JoSBKNo1PeH+ZmPa+dfP0v3Ii/9r3K9YvX5r6EaU2iIUk0JImGJNEopwOuzW1Mh90s4YeG73y/c99ftSbRkCQakkRDkmiUe9xfMlN768r/iX7qax8pTv7wYE2iIUk0JImGJNHYO+V9zlzPydxbuDbvcO1a07c9bm6QJBqSREOSaHyYVTJXVL5Vyz/MzQ68tuP/VqX/YE2iIUk0JImGJNH40FVyrYF6y9aN5mrMh7lpiCdHQZ7YemZrEg1JoiFJNCSJxtEJOHP9DCdl8sncwZMrP8z9ct463NKsEm6QJBqSREOSaOx1laydFHdzB7evb/Sd57hf68AJ3681iYYk0ZAkGpJE48MJOFu2Zkw/XDuvMiyit+67djKe+62BKg/WJBqSREOSaEgSjXvzuB/m+qnDbxKGA7jnNtO3brRmHjfvkyQakkRDkmgc9XFvOanl3zrkZS0swE8e4+HaOMAHaxINSaIhSTQkicbeCThz4/HWN5o7A369qb3lrfMqv6TL25pEQ5JoSBINSaJRnjk5Z65xO/wMcW3uYPjMZpXwdSSJhiTRkCQa31JxX/tyYFi8r392rjPkrY14e9zcIEk0JImGJNHYq7jntnHXN7o2d3Cum2VLWNpfm2RiTaIhSTQkiYYk0Tg6czIUlo1z0wHDbuuTcYBvDRxf39eaREOSaEgSDUmi8TwBB/4daxINSaIhSTQkicb/AFUowNUAur47AAAAAElFTkSuQmCC" alt="QR Presupuesto" style="width:52px;height:52px;">
+        <div style="font-size:8px;color:#888;margin-top:2px;">Escanea tu QR</div>
+        <div style="font-size:7px;color:#aaa;">Presupuesto P-260303</div>
+        <div style="font-size:6px;color:#bbb;">Cumplimiento normativa CE / RGPD</div>
+      </div>
+    </div>
+        <div style="font-size:7px;color:#aaa;">cristaleriasantosglasses.com</div>
+      </div>
+      <div style="text-align:center;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMMAAADDCAIAAACwHTL9AAAE+UlEQVR4nO3dwY0cNxRFUUlwFg7LwTgGBeOwHMdozwUbBC9ZJeGcndDdxerRA8Hh/Pr8/vX19Q22/Xj6BvhDSBINSaIhSTT+Gv799z//3hn4//9+TsYdXh3M3xx+hWtXXnLt688N45qTaEgSDUmiIUk0xhX3YGdhOHhqIby0eF96demXhuHVnXte+k+59j9oTqIhSTQkiYYk0fiw4h4srZrDtd78NpYG2llELwkH2lmeL11q58rmJBqSREOSaEgSjbUV9zlhGcm1reedN++sfK/VjSwxJ9GQJBqSREOSaLxlxb2zbb2zmb600t8poN7ZiT7314KQOYmGJNGQJBqSRGNtxX1u6Xdu23pufqlzD3Du3PO53zB2mJNoSBINSaIhSTQ+rLivFTBcqxsJ72pJeM87fV3OMSfRkCQakkRDkmh8f2c/7p0ldjju3Et2wF9Sc2JOoiFJNCSJhiTRGFfc79w/HZxrTrJ0qbAyJPzstVbm+nFzhCTRkCQakkRjbY/7nW3qzjULXLqNJS85xWbJ/Oubk2hIEg1JoiFJND7scQ/O9fCbX2rnNpZc29N/6o8H5866NCfRkCQakkRDkmiUddzn1tTh2Y9Lt7Hk2vcNx91hxc0RkkRDkmhIEo2xV0n4UOK1JiHn3nzO0jnuYb/D8M0DcxINSaIhSTQkicbBU94HO+XV505bv1YJM3euDeF8oLmluzIn0ZAkGpJEQ5JobPXjvtYX+9rJO3M7x+WEnnqOVB03N0gSDUmiIUk01roDhqvmcz2mr9WN/I414OcK5M1JNCSJhiTRkCQaH56cfOoYl2v9Rp7qqX3NtV6J5iQakkRDkmhIEo2De9zXjoJ8yaGLg3f2Ll+68tKlzEk0JImGJNGQJBpb3QHfuas7eEnz7ms174Nzh2ra4+YISaIhSTQkicbWHve1A3GWPHUCzlM/jafKya24OUKSaEgSDUmisVbHPXjnvu21g3jC3fN31rwvMSfRkCQakkRDkmisnYBzrpvz/LOhpS947cDG8AnVuaX+f0sDmZNoSBINSaIhSTTWTsA5twB/qnJ557PXdqLn416rZlFVwg2SREOSaEgSjXHFfa05yc5y9Z3F5tdW+jvVLDtn3MyZk2hIEg1JoiFJND48OTm3Uxpx7UCcwVMtRM49OPqSH505iYYk0ZAkGpJEY61XyTXhPvXOuHMvOezxqZ/VwJxEQ5JoSBINSaLxoY77qUcH53ZKI84Virykfjy09GuBOYmGJNGQJBqSROPDivvaZut83KVX5wNd2yA+V+xx7uvPB5q/2ZxEQ5JoSBINSaKx1qtkSfhs5PyzS+OGm+k7zn3BpXHD5ojmJBqSREOSaEgSja1T3kNPnURzroff0kDhtvXOZ/Uq4XmSREOSaEgSjQ8n4JyzVDeys048d8bNU9UdOwPN6cfN8ySJhiTRkCQa93qVXDsBZ3DuKyyN+5IveK5u3ZxEQ5JoSBINSaKxVsd97kCcHWHV87n23Oeu/JJKGHMSDUmiIUk0JInGwScnX+KpkoywUOTcQaDhTZqTaEgSDUmiIUk03rLivla+Et5GeNTOvPb83Ljhlc1JNCSJhiTRkCQaayvup46gHOw8Kjk4d/j6S/qrXDtbx5xEQ5JoSBINSaLx4cnJc17SLW9J2ET73EL4qRPizUk0JImGJNGQJBpv6cfN786cREOSaEgSDUmi8QvqI7FgecSodgAAAABJRU5ErkJggg==" alt="QR Presupuesto" style="width:52px;height:52px;">
+        <div style="font-size:8px;color:#888;margin-top:2px;">Escanea tu QR</div>
+        <div style="font-size:7px;color:#aaa;">Presupuesto P-260303</div>
+        <div style="font-size:6px;color:#bbb;">Cumplimiento normativa CE / RGPD</div>
+      </div>
+    </div>
+<div class="footer">
+      Santos Glasses · C/ Concordia 11 posterior, 28931 Móstoles · Tlf: 646 469 788 · info@cristaleriasantosglasses.com
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var canvas = document.getElementById('fCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var drawing = false;
+
+  function pos(e) {
+    var r = canvas.getBoundingClientRect();
+    var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    var y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return { x: x, y: y };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    drawing = true;
+    var p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    window.hasSig = true;
+    var hint = document.querySelector('.firma-canvas .hint');
+    if (hint) hint.style.display = 'none';
+    checkBtn();
+  }
+
+  function move(e) {
+    e.preventDefault();
+    if (!drawing) return;
+    var p = pos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#2d2d2d';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  function stop(e) { e.preventDefault(); drawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', stop);
+  canvas.addEventListener('mouseleave', stop);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchend', stop, { passive: false });
+})();
+
+function clearFirma() {
+  var c = document.getElementById('fCanvas');
+  if (!c) return;
+  c.getContext('2d').clearRect(0, 0, 220, 75);
+  window.hasSig = false;
+  var hint = document.querySelector('.firma-canvas .hint');
+  if (hint) hint.style.display = 'block';
+  checkBtn();
+}
+
+function checkBtn() {
+  var btn = document.getElementById('btnAceptar');
+  if (!btn) return;
+  btn.disabled = !(document.getElementById('acceptCheck').checked && window.hasSig);
+}
+
+function descargarPdf() {
+  // Fallback: window.print() para escritorio
+  // En iOS: window.print() abre el menú compartir
+  window.print();
+}
+
+function aceptarYDescargar() {
+  var btn = document.getElementById('btnAceptar');
+  if (!btn) return;
+  btn.textContent = '⏳ GENERANDO...';
+  btn.disabled = true;
+
+  var cliente = document.getElementById('cliNombre').value.trim() || 'Cliente';
+  var ahora = new Date().toLocaleString('es-ES', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  // Render firma en el HTML para que salga en el PDF
+  var firmaCanvas = document.getElementById('fCanvas');
+  if (firmaCanvas && window.hasSig) {
+    var firmaImg = document.createElement('img');
+    firmaImg.src = firmaCanvas.toDataURL('image/png');
+    firmaImg.style.width = '200px';
+    firmaImg.style.height = '65px';
+    firmaImg.style.border = '1px solid #ccc';
+    firmaImg.style.borderRadius = '4px';
+    firmaImg.style.display = 'block';
+    firmaImg.style.margin = '6px 0';
+    firmaImg.id = 'firmaRender';
+    // Remove old one if exists
+    var old = document.getElementById('firmaRender');
+    if (old) old.remove();
+    // Insert after canvas parent
+    var parent = firmaCanvas.closest('.firma-inline') || firmaCanvas.parentNode;
+    if (parent) parent.after(firmaImg);
+  }
+
+  // Insert fecha de firma visible
+  var fechaFirma = document.getElementById('fechaFirma');
+  if (!fechaFirma) {
+    fechaFirma = document.createElement('p');
+    fechaFirma.id = 'fechaFirma';
+    fechaFirma.style.cssText = 'font-size:10px;color:#008c78;font-weight:bold;margin:4px 0;';
+    var ref = document.querySelector('.firma-box .accept-row') || document.querySelector('.firma-box button');
+    if (ref) ref.before(fechaFirma);
+  }
+  fechaFirma.textContent = '✓ Firmado electrónicamente el ' + ahora;
+
+  var txt = '';
+  txt += '╔══════════════════════════════════════════════════╗\n';
+  txt += '║  PRESUPUESTO ELECTRÓNICO                        ║\n';
+  txt += '║  Santos Glasses - Joaquín Castro S.L.           ║\n';
+  txt += '╚══════════════════════════════════════════════════╝\n\n';
+  txt += 'Nº: ' + (document.getElementById('docNum').textContent) + '\n';
+  txt += 'Fecha: ' + (document.getElementById('docDate').textContent) + '\n\n';
+  txt += '─ CLIENTE ────────────────────────────────────────────\n';
+  txt += '  ' + cliente + '\n';
+  txt += '  Tel: ' + document.getElementById('cliTel').value.trim() + '\n';
+  txt += '  Email: ' + document.getElementById('cliEmail').value.trim() + '\n';
+  txt += '  Dirección: ' + document.getElementById('cliDir').value.trim() + '\n';
+  txt += '  CIF/NIF: ' + document.getElementById('cliCif').value.trim() + '\n';
+  txt += '\n';
+  txt += '─ CONCEPTOS ──────────────────────────────────────────\n';
+  var filas = document.querySelectorAll('table tbody tr');
+  filas.forEach(function(tr) {
+    var celdas = tr.querySelectorAll('td');
+    if (celdas.length >= 7) {
+      txt += '  ' + celdas[0].textContent.trim() + ' ... ' + celdas[6].textContent.trim() + '\n';
+    }
+  });
+  txt += '\n─ RESUMEN ─────────────────────────────────────────────\n';
+  txt += '  Total documento:    ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '0,00 €') + '\n';
+  txt += '\n─ PAGO ──────────────────────────────────────────────\n';
+  txt += '  CaixaBank · IBAN: ES74 2100 4935 0613 0086 2186\n';
+  txt += '  50% señal · 50% resto a la entrega\n\n';
+  txt += '─ RESERVA DE DOMINIO MERCANTIL ───────────────────────\n';
+  txt += '  El material es propiedad de Joaquín Castro S.L.\n';
+  txt += '  hasta el abono íntegro del documento.\n\n';
+  txt += '─ CERTIFICACIÓN ELECTRÓNICA ──────────────────────────\n';
+  txt += '  ✓ FIRMADO ELECTRÓNICAMENTE\n';
+  txt += '  Fecha: ' + ahora + '\n\n';
+  txt += '╔══════════════════════════════════════════════════╗\n';
+  txt += '║  Santos Glasses                                 ║\n';
+  txt += '║  C/ Concordia 11 posterior, 28931 Móstoles, Madrid        ║\n';
+  txt += '║  Tlf: 646 469 788                               ║\n';
+  txt += '║  info@cristaleriasantosglasses.com              ║\n';
+  txt += '╚══════════════════════════════════════════════════╝\n';
+
+  var blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.setAttribute('download', (document.getElementById('docNum').textContent) + '_' + cliente.replace(/ /g, '_') + '.txt');
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  window.open('mailto:admin@cristaleriasantosglasses.com?subject=' + encodeURIComponent(document.getElementById('docNum').textContent + ' - ' + cliente + ' [FIRMADO]') + '&body=' + encodeURIComponent('PRESUPUESTO ACEPTADO Y FIRMADO\n\nNº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\nTotal: ' + (document.querySelector('.totals .big') ? document.querySelector('.totals .big').textContent : '') + '\nFirma: Electrónica'), '_blank');
+
+  alert('✅ PRESUPUESTO ACEPTADO Y FIRMADO\n\n' +
+    'Nº: ' + document.getElementById('docNum').textContent + '\nCliente: ' + cliente + '\n\n' +
+    '📁 Archivo descargado en su dispositivo\n' +
+    '📧 Correo abierto como respaldo');
+
+  btn.textContent = '▶ ACEPTAR PRESUPUESTO';
+  btn.disabled = false;
+}
+</script>
+
+<script>
+try {
+  var u = window.location.href;
+  if (u.indexOf('http') !== 0 || u.indexOf('localhost') > -1 || u.indexOf('127.0.0.1') > -1) {
+    u = 'https://santosglasses-cyber.github.io/presupuestos/' + window.location.pathname.split('/').pop();
+  }
+  new QRCode(document.getElementById('qrcode'), {text:u, width:56, height:56, colorDark:'#1a5276', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H});
+  document.getElementById('qrBox2').style.display = 'block';
+  document.getElementById('qrcode').onclick = function(){window.open(u, '_blank');};
+} catch(e) {}
+</script>
+
+</body>
+</html>
